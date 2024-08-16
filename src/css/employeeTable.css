@@ -1,0 +1,7 @@
+.column {
+  min-width: 210;
+  height: "2.8rem";
+  border-right: "1px solid #babfc7";
+  border-bottom: "1px solid #babfc7";
+  text-align: "left";
+}

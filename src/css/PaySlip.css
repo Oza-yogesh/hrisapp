@@ -1,0 +1,5 @@
+@media print {
+  .download-button {
+    display: none;
+  }
+}

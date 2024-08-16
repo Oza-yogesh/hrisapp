@@ -1,0 +1,66 @@
+{
+  "homeBackgroundImage": {
+    "src": "https://ik.imagekit.io/nwssoft/Payroll-portal/HRIS-Website/27472520_1340.jpg?updatedAt=1708107623790",
+    "alt": "background-blue-curved"
+  },
+  "landingImage": {
+    "src": "https://ik.imagekit.io/nwssoft/Payroll-portal/female-applicant-interviewed-by-hr-mangers.jpg?updatedAt=1708070265032",
+    "alt": "female-applicant-interviewed-by-hr-mangers"
+  },
+  "aboutusBackgroundImage": {
+    "src": "https://ik.imagekit.io/nwssoft/Payroll-portal/HRIS-Website/28428245_rm222batch5-mind-16.jpg?updatedAt=1708107623763",
+    "alt": "aboutus-background-design-curved"
+  },
+  "aboutUsLandingImage": {
+    "src": "https://ik.imagekit.io/nwssoft/Payroll-portal/side-view-people-working-with-laptop%20(1).jpg?updatedAt=1708068089660",
+    "alt": "colleague-sitting-with-laptop"
+  },
+  "aboutUsVisionImage": {
+    "src": "https://ik.imagekit.io/nwssoft/Payroll-portal/about-us_Fmf6jKy00-removebg-preview.png?updatedAt=1708062444715",
+    "alt": "men-discussing-with-laptop-vector"
+  },
+  "featuresBackgroundImage": {
+    "src": "https://ik.imagekit.io/nwssoft/Payroll-portal/HRIS-Website/16351667_rm222batch5-kul-18.jpg?updatedAt=1708107623744",
+    "alt": "side-curved-background"
+  },
+  "featuresImage": {
+    "src": "https://ik.imagekit.io/nwssoft/Payroll-portal/6052389.jpg?updatedAt=1707475462371",
+    "alt": "girl-sitting-on-chair"
+  },
+  "payrollLandingImage": {
+    "src": "https://img.freepik.com/free-photo/accountant-calculating-profit-with-financial-analysis-graphs_74855-4937.jpg?w=900&t=st=1708084550~exp=1708085150~hmac=4de8e0f3ac4424f49fc422baca4761c0df89ca9bb5dbf2130bd4239681afd680",
+    "alt": "girl-doing-calculations"
+  },
+  "payrollImage": {
+    "src": "https://img.freepik.com/free-vector/bill-analysis-concept-illustration_114360-19348.jpg?size=626&ext=jpg&uid=R94471499&ga=GA1.1.1250616273.1708006840&semt=sph",
+    "alt": "man-reading-list"
+  },
+  "recruitmentLandingImage": {
+    "src": "https://ik.imagekit.io/nwssoft/Payroll-portal/8292849.jpg?updatedAt=1706864576623",
+    "alt": "recruitment-management"
+  },
+  "recruitmentBusinessImage": {
+    "src": "https://ik.imagekit.io/nwssoft/Payroll-portal/6976378_4565-removebg-preview.png?updatedAt=1708064985200",
+    "alt": "girl-sitting-with-laptop"
+  },
+  "discussionImage": {
+    "src": "https://ik.imagekit.io/nwssoft/Payroll-portal/people-collaborating.png?updatedAt=1707743699185",
+    "alt": "people-discussion"
+  },
+  "hrManagementImage": {
+    "src": "https://ik.imagekit.io/nwssoft/Payroll-portal/man-sitting-with-laptop.png?updatedAt=1707737085310",
+    "alt": "hr-with-laptop-planning"
+  },
+  "timeAttendanceImage": {
+    "src": "https://ik.imagekit.io/nwssoft/Payroll-portal/12303817_4953029.jpg?updatedAt=1708098352278",
+    "alt": "time-calendar-watch"
+  },
+  "contactingImage": {
+    "src": "https://ik.imagekit.io/nwssoft/Payroll-portal/portrait-businessman-talking-phone-office.jpg?updatedAt=1708062573342",
+    "alt": "man-on-call"
+  },
+  "logingInImage": {
+    "src": "https://ik.imagekit.io/nwssoft/Payroll-portal/office-4857268.jpg?updatedAt=1708092763714",
+    "alt": "laptop-loging-in"
+  }
+}
