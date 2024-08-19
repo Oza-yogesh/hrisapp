@@ -13,30 +13,31 @@ import {
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import CloseIcon from "@mui/icons-material/Close";
-import { useNavigate } from "react-router-dom";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import dayjs, { Dayjs } from "dayjs"; // Import Dayjs
+import { Dayjs } from "dayjs";
 
+// interface
 interface Props {
   setValueForComponent: (value: number) => void;
   setFormDataForNext: (value: any) => void;
+  setIsMandatoryInfoComplete: (complete: boolean) => void; // New prop for setting completion status
 }
 
-const MandatoryInfo: React.FC<Props> = ({
+const Mandatory_info: React.FC<Props> = ({
   setValueForComponent,
   setFormDataForNext,
+  setIsMandatoryInfoComplete,
 }) => {
+  // form for mandatory info
   const [formData, setFormData] = useState({
     hasPF: false,
-    selectedDate: null as Dayjs | null, // Use Dayjs type
+    selectedDate: null as Dayjs | null,
     firstName: "",
     middleName: "",
     lastName: "",
     email: "",
     phone: "",
   });
-
-  const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -48,22 +49,39 @@ const MandatoryInfo: React.FC<Props> = ({
   };
 
   const handleDateChange = (date: Dayjs | null) => {
-    // Use Dayjs type
     setFormData((prevData) => ({ ...prevData, selectedDate: date }));
   };
 
   const handleNext = () => {
-    setValueForComponent(1);
-    setFormDataForNext(formData);
+    if (
+      formData.firstName &&
+      formData.lastName &&
+      formData.email &&
+      formData.phone
+    ) {
+      setValueForComponent(1);
+      setFormDataForNext(formData);
+      setIsMandatoryInfoComplete(true); // Update the completion status
+    } else {
+      // Optionally handle the case where some required fields are missing
+      console.log("Please fill all required fields");
+    }
   };
 
   return (
-    <Box sx={{ p: 4, width: { xs: "100%", md: "820px" }, mx: "auto" }}>
-      <Paper elevation={3} sx={{ p: 2, boxShadow: "0px 3px 6px #00000029" }}>
+    <Box sx={{ p: 4, width: "750px" }}>
+      <Paper
+        elevation={3}
+        sx={{
+          padding: 2,
+          textAlign: "initial",
+          boxShadow: "0px 3px 6px #00000029",
+        }}
+      >
         <Box
           component="form"
           sx={{
-            "& .MuiTextField-root": { m: 1, width: { xs: "100%", md: "25ch" } },
+            "& .MuiTextField-root": { m: 1, width: "9ch" },
           }}
           noValidate
           autoComplete="off"
@@ -205,4 +223,4 @@ const MandatoryInfo: React.FC<Props> = ({
   );
 };
 
-export default MandatoryInfo;
+export default Mandatory_info;

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { Box, Divider, Grid, Paper } from "@mui/material";
-import { Tabs, Tab } from "@mui/material";
+import { Box, Divider, Grid, Paper, Tabs, Tab } from "@mui/material";
 import TabPanel2 from "./TabPanel2";
 import OptionalInfo from "./OptionalInfo";
 import Mandatory_info from "./Mandatory_info";
@@ -8,13 +7,14 @@ import Mandatory_info from "./Mandatory_info";
 const OnboardEmployee: React.FC = () => {
   const [value, setValue] = useState(0);
   const [FormDataForNext, setFormDataForNext] = useState([]);
+  const [isMandatoryInfoComplete, setIsMandatoryInfoComplete] = useState(false);
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue);
   };
 
   return (
-    <Box sx={{ p: 4, width: { xs: "100%", md: "820px" }, mx: "auto" }}>
+    <Box sx={{ p: 4, width: { xs: "100%", md: "910px" }, mx: "auto" }}>
       <Paper elevation={3} sx={{ p: 2, boxShadow: "0px 3px 6px #00000029" }}>
         <Box
           component="form"
@@ -32,13 +32,17 @@ const OnboardEmployee: React.FC = () => {
                 aria-label="simple tabs example"
               >
                 <Tab label="Mandatory Infos" />
-                <Tab label="Pre-Onboarding" />
+                <Tab
+                  label="Pre-Onboarding"
+                  disabled={!isMandatoryInfoComplete}
+                />
               </Tabs>
 
               <TabPanel2 value={value} index={0}>
                 <Mandatory_info
                   setValueForComponent={setValue}
                   setFormDataForNext={setFormDataForNext}
+                  setIsMandatoryInfoComplete={setIsMandatoryInfoComplete}
                 />
               </TabPanel2>
               <TabPanel2 value={value} index={1}>

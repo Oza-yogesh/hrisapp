@@ -25,6 +25,9 @@ import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import FemaleIcon from "@mui/icons-material/Female";
 import MaleIcon from "@mui/icons-material/Male";
 import TransgenderIcon from "@mui/icons-material/Transgender";
+import { postRequest } from "../../../api/Api";
+import { ONBOARD_EMPLOYEE } from "../../../api/Server";
+import { AxiosError, AxiosResponse } from "axios";
 
 interface Props {
   setValueForComponent: (value: number) => void;
@@ -41,9 +44,16 @@ const OptionalInfo: React.FC<Props> = ({
   const [jobTitle2, setJobTitle2] = useState("");
   const [numberValue, setNumberValue] = useState("");
 
+  // call api to onborad employee
   const handleNext = () => {
-    console.log("Next button clicked");
     console.log({ FormDataForNext });
+    postRequest(ONBOARD_EMPLOYEE, "", FormDataForNext)
+      .then((response: AxiosResponse) => {
+        if (response.status === 200) {
+          alert("Verification Email  sent");
+        }
+      })
+      .catch((error: AxiosError) => alert(error.response?.data));
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -132,9 +142,7 @@ const OptionalInfo: React.FC<Props> = ({
                 />
               </LocalizationProvider>
             </Grid>
-            
-            
-            
+
             {/* male and female grid */}
             <Grid item>
               <FormLabel
@@ -186,10 +194,6 @@ const OptionalInfo: React.FC<Props> = ({
                 />
               </RadioGroup>
             </Grid>
-
-
-
-
           </Grid>
 
           <Divider />

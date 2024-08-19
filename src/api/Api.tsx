@@ -1,9 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse } from "axios";
 
-// use these methods in your components to call API.
-// use ".then/.catch" rather than using "async/await" to handle errors more specifically in your component.
-// use base server url here from .env file. Don't mention base url in API methods use only path.
-
 const getInitialized = (
   contentType?: string,
   params?: Record<string, string> | undefined

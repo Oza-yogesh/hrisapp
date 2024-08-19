@@ -38,6 +38,7 @@ const SetPassword: React.FC = () => {
       setPassword("");
       setConfirmPassword("");
       setError("");
+      alert("passwords set successfully!!!");
       navigate("/login");
     }
   };
