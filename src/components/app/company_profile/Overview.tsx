@@ -1,15 +1,11 @@
 import { useEffect, useState } from "react";
-import {
-  Divider,
-  Grid,
-  Paper,
-  Typography,
-} from "@mui/material";
+import { Divider, Grid, Paper, Typography } from "@mui/material";
 import FacebookRoundedIcon from "@mui/icons-material/FacebookRounded";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import { getRequest } from "../../../api/Api";
 import { GET_COMPANY_DATA } from "../../../api/Server";
+import { useQuery } from "@tanstack/react-query";
 
 // Define an interface for the company data
 interface CompanyData {
@@ -25,6 +21,7 @@ interface CompanyData {
 export default function Overview() {
   const [companyData, setCompanyData] = useState<CompanyData[]>([]);
 
+  // get company data
   useEffect(() => {
     getRequest(GET_COMPANY_DATA)
       .then((response) => setCompanyData(response.data))
@@ -33,11 +30,19 @@ export default function Overview() {
       });
   }, []);
 
+  // const { isPending, error, data, isFetching } = useQuery({
+  //   queryKey: ["companyData"],
+  //   queryFn: async () => {
+  //     const response = await getRequest(GET_COMPANY_DATA);
+  //     return response.data;
+  //   },
+  // });
+  // console.log(isPending, error, data, isFetching);
   return (
     <Grid container spacing={2} marginTop="20px">
       <Grid item xs={12}>
         <Paper elevation={3} sx={{ padding: "20px", textAlign: "initial" }}>
-          {companyData.map((company) => (
+          {companyData.map((company: any) => (
             <div key={company.id}>
               <Grid container spacing={2}>
                 <Grid item xs={12}>

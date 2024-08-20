@@ -22,6 +22,8 @@ export default function Login() {
       postRequest(LOGIN, "", loginData)
         .then((response: AxiosResponse) => {
           if (response.status === 200) {
+            const userId = response.data.userId;
+            localStorage.setItem("userId", userId);
             navigate("/dashboard");
           }
         })
@@ -29,7 +31,6 @@ export default function Login() {
     } catch (error) {
       console.error(error);
     }
-    
   };
 
   return (

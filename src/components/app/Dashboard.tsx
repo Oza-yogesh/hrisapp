@@ -16,7 +16,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { Theme, ThemeProvider, createTheme } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
-import { FC, MouseEvent, useState } from "react";
+import { FC, MouseEvent, useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { MenuObject } from "../interfaces/Interfaces";
 import {
@@ -27,6 +27,10 @@ import {
   StyledInputBase,
 } from "../styled/DashboardParts";
 import { MainListItems } from "./ListItems";
+import { getRequest } from "../../api/Api";
+import { GET_ALL_EMPLOYEE_DETAILS } from "../../api/Server";
+import { AxiosResponse } from "axios";
+import { Autocomplete } from "@mui/material";
 
 const MenuList: MenuObject[] = [
   { name: "Profile", icon: <AccountCircleIcon /> },
@@ -74,15 +78,42 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
+interface Employee {
+  _id: string;
+  name?: string;
+  employeeId?: string;
+}
+
 export default function Dashboard() {
   const navigate = useNavigate();
   const classes = useStyles();
 
   const [searchValue, setSearchValue] = useState("");
 
-  const handleInputChange = (event: any) => {
-    setSearchValue(event.target.value);
+  const [allEmployeeData, setallEmployeeData] = useState<Employee[]>([]);
+  const [FilteredEmployeeData, setFilteredEmployeeData] = useState<Employee[]>(
+    []
+  );
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setSearchValue(value);
+    const filteredData = allEmployeeData.filter(
+      (employee) =>
+        (employee.name &&
+          employee.name.toLowerCase().includes(value.toLowerCase())) ||
+        (employee.employeeId &&
+          employee.employeeId.toLowerCase().includes(value.toLowerCase()))
+    );
+    console.log(filteredData);
+    setFilteredEmployeeData(filteredData);
   };
+
+  useEffect(() => {
+    getRequest(GET_ALL_EMPLOYEE_DETAILS).then((res: AxiosResponse) =>
+      setallEmployeeData(res.data)
+    );
+  }, []);
 
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const [open, setOpen] = useState<boolean>(false);
@@ -157,6 +188,44 @@ export default function Dashboard() {
                       value={searchValue}
                       onChange={handleInputChange}
                     />
+
+                    {/* <Autocomplete
+                      id="country-select-demo"
+                      sx={{ width: 300 }}
+                      // options={countries}
+                      autoHighlight
+                      // getOptionLabel={(option) => option.label}
+                      renderOption={(props, option) => {
+                        const { key, ...optionProps } = props;
+                        return (
+                          <Box
+                            key={key}
+                            component="li"
+                            sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
+                            {...optionProps}
+                          >
+                            <img
+                              loading="lazy"
+                              width="20"
+                              srcSet={`https://flagcdn.com/w40/${option.code.toLowerCase()}.png 2x`}
+                              src={`https://flagcdn.com/w20/${option.code.toLowerCase()}.png`}
+                              alt=""
+                            />
+                            {option.label} ({option.code}) +{option.phone}
+                          </Box>
+                        );
+                      }}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          label="Choose a country"
+                          inputProps={{
+                            ...params.inputProps,
+                            autoComplete: "new-password", // disable autocomplete and autofill
+                          }}
+                        />
+                      )}
+                    /> */}
                   </Search>
 
                   {/* notification icon */}

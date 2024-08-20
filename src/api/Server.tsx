@@ -12,5 +12,8 @@ export const SETPASSWORD: string = "/api/private/employee/setpassword";
 export const GET_COMPANY_DATA: string = "/api/private/company";
 export const ONBOARD_EMPLOYEE: string = "/api/private/employee/createEmployee";
 
+export const GET_EMPLOYEE_DETAILS_BY_ID: string =
+  "/api/private/employee/getEmployeeDetailsById";
 
-export const GET_EMPLOYEE_DETAILS_BY_ID: string = "/api/private/employee/getEmployeeDetailsById";
+export const GET_ALL_EMPLOYEE_DETAILS: string =
+  "/api/private/employee/getEmployeeDetails";

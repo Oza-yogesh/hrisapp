@@ -36,7 +36,7 @@ const Mandatory_info: React.FC<Props> = ({
     middleName: "",
     lastName: "",
     email: "",
-    phone: "",
+    phoneNumber: "",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -57,7 +57,7 @@ const Mandatory_info: React.FC<Props> = ({
       formData.firstName &&
       formData.lastName &&
       formData.email &&
-      formData.phone
+      formData.phoneNumber
     ) {
       setValueForComponent(1);
       setFormDataForNext(formData);
@@ -94,7 +94,7 @@ const Mandatory_info: React.FC<Props> = ({
                   fontWeight="bold"
                   textTransform="uppercase"
                 >
-                  PF Enrollment
+                  Pre-Onboarding
                 </Typography>
                 <Switch
                   checked={formData.hasPF}
@@ -152,20 +152,21 @@ const Mandatory_info: React.FC<Props> = ({
                 onChange={handleChange}
               />
             </Grid>
+
             <Grid item xs={12} md={4}>
               <TextField
                 id="phone"
-                name="phone"
+                name="phoneNumber"
                 label="Phone Number"
                 variant="standard"
                 fullWidth
-                value={formData.phone}
+                value={formData.phoneNumber}
                 onChange={handleChange}
               />
             </Grid>
 
             {formData.hasPF && (
-              <Grid item xs={12} md={6}>
+              <Grid item xs={12} md={4}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
                     label="Choose Date"
