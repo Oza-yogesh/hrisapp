@@ -52,22 +52,59 @@ export interface ErrorBoundaryState {
 }
 
 export interface EmployeeDetails {
+  _id: string;
+  companyId: string;
   firstName: string;
+  middleName: string;
   lastName: string;
+  email: string;
+  password: string;
+  phoneNumber: string;
+  alternatePhoneNumber?: string; // Optional as it's not in the provided object
   dateOfBirth: string;
   gender: string;
   bloodGroup: string;
   maritalStatus: string;
-  officialEmail: string;
-  personalEmail: string;
-  phoneNumber: string;
-  alternatePhoneNumber: string;
-  currentAddress: string;
-  permanentAddress: string;
-  houseType: string;
-  currentResidenceSince: string;
-  currentCitySince: string;
-  linkedin: string;
-  facebook: string;
-  twitter: string;
+  employeeId: string;
+  departmentId: string;
+  subDepartmentId: string;
+  designationId: string;
+  jobTitle: string;
+  reportingManagerId: string;
+  workLocation: string;
+  employeeType: string;
+  probationPeriod: number;
+  probationStatus: string;
+  dateOfJoining: string;
+  ctc: number;
+  status: string;
+  roleId: string;
+  bankDetails: {
+    accountHolderName: string;
+    bankName: string;
+    city: string;
+    branchName: string;
+    ifscCode: string;
+    accountNumber: string;
+  };
+  addresses: {
+    currentAddress: string;
+    permanentAddress: string;
+    houseType: string;
+    currentResidenceSince: string;
+    currentCitySince: string;
+  };
+  socialProfile: {
+    linkedin: string;
+    facebook: string;
+    twitter: string;
+  };
+  workHistory: {
+    department: string;
+    designation: string;
+    from: string;
+    to: string;
+    _id: string;
+  }[];
+  __v: number;
 }

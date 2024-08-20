@@ -18,6 +18,7 @@ export default function Login() {
         email: data.get("email"),
         password: data.get("password"),
       };
+
       postRequest(LOGIN, "", loginData)
         .then((response: AxiosResponse) => {
           if (response.status === 200) {
@@ -28,6 +29,7 @@ export default function Login() {
     } catch (error) {
       console.error(error);
     }
+    
   };
 
   return (

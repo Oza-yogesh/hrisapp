@@ -21,6 +21,8 @@ import MaleIcon from "@mui/icons-material/Male";
 import TransgenderIcon from "@mui/icons-material/Transgender";
 import axios from "axios";
 import { EmployeeDetails } from "../../interfaces/Interfaces";
+import { getRequest } from "../../../api/Api";
+import { GET_EMPLOYEE_DETAILS_BY_ID } from "../../../api/Server";
 
 export default function PersonalProfile() {
   type Section = "personalInfo" | "contactInfo" | "addresses" | "socialProfile";
@@ -33,33 +35,61 @@ export default function PersonalProfile() {
   });
 
   const [details, setDetails] = useState<EmployeeDetails>({
+    _id: "",
+    companyId: "",
     firstName: "",
+    middleName: "",
     lastName: "",
+    email: "",
+    password: "",
+    phoneNumber: "",
+    alternatePhoneNumber: "",
     dateOfBirth: "",
     gender: "",
     bloodGroup: "",
     maritalStatus: "",
-    officialEmail: "",
-    personalEmail: "",
-    phoneNumber: "",
-    alternatePhoneNumber: "",
-    currentAddress: "",
-    permanentAddress: "",
-    houseType: "",
-    currentResidenceSince: "",
-    currentCitySince: "",
-    linkedin: "",
-    facebook: "",
-    twitter: "",
+    employeeId: "",
+    departmentId: "",
+    subDepartmentId: "",
+    designationId: "",
+    jobTitle: "",
+    reportingManagerId: "",
+    workLocation: "",
+    employeeType: "",
+    probationPeriod: 0,
+    probationStatus: "",
+    dateOfJoining: "",
+    ctc: 0,
+    status: "",
+    roleId: "",
+    bankDetails: {
+      accountHolderName: "",
+      bankName: "",
+      city: "",
+      branchName: "",
+      ifscCode: "",
+      accountNumber: "",
+    },
+    addresses: {
+      currentAddress: "",
+      permanentAddress: "",
+      houseType: "",
+      currentResidenceSince: "",
+      currentCitySince: "",
+    },
+    socialProfile: {
+      linkedin: "",
+      facebook: "",
+      twitter: "",
+    },
+    workHistory: [],
+    __v: 0,
   });
 
   useEffect(() => {
     const employeeId = "66a201472ab048390c138c35";
 
-    axios
-      .get(
-        `http://localhost:4000/api/private/employee/getEmployeeDetailsById?_id=${employeeId}`
-      )
+    getRequest(`${GET_EMPLOYEE_DETAILS_BY_ID}/${employeeId}`)
       .then((response) => {
         setDetails(response.data);
         setSelectedValue(response.data.gender.toLowerCase());
@@ -71,8 +101,6 @@ export default function PersonalProfile() {
         );
       });
   }, []);
-
-  console.log({ details });
 
   const [selectedValue, setSelectedValue] = useState("");
 
@@ -106,7 +134,6 @@ export default function PersonalProfile() {
       ...prevState,
       [section]: false,
     }));
-    // Add logic to save the details, e.g., making an API call
   };
 
   return (
@@ -116,9 +143,11 @@ export default function PersonalProfile() {
         spacing={2}
         sx={{
           display: "flex",
+          width: "60%",
           justifyContent: "center",
           alignItems: "center",
-          marginTop: "20px",
+          textAlign: "center",
+          margin: " auto",
         }}
       >
         <Grid item xs={12}>
@@ -350,7 +379,7 @@ export default function PersonalProfile() {
                       label="Official Email ID"
                       variant="standard"
                       name="officialEmail"
-                      value={details.officialEmail}
+                      value={details.email}
                       onChange={handleChange}
                       fullWidth
                     />
@@ -360,7 +389,7 @@ export default function PersonalProfile() {
                       label="Personal Email ID"
                       variant="standard"
                       name="personalEmail"
-                      value={details.personalEmail}
+                      value={details.email}
                       onChange={handleChange}
                       fullWidth
                     />
@@ -380,7 +409,7 @@ export default function PersonalProfile() {
                       label="Alternate Phone Number"
                       variant="standard"
                       name="alternatePhoneNumber"
-                      value={details.alternatePhoneNumber}
+                      value={details.phoneNumber}
                       onChange={handleChange}
                       fullWidth
                     />
@@ -402,7 +431,7 @@ export default function PersonalProfile() {
                       Official Email ID
                     </Typography>
                     <Typography variant="body2" color="#808080">
-                      {details.officialEmail}
+                      {details.email}
                     </Typography>
                   </Grid>
                   <Grid item xs={6} md={6}>
@@ -410,7 +439,7 @@ export default function PersonalProfile() {
                       Personal Email ID
                     </Typography>
                     <Typography variant="body2" color="#808080">
-                      {details.personalEmail}
+                      {details.email}
                     </Typography>
                   </Grid>
                   <Grid item xs={6} md={6}>
@@ -426,7 +455,7 @@ export default function PersonalProfile() {
                       Alternate Phone Number
                     </Typography>
                     <Typography variant="body2" color="#808080">
-                      {details.alternatePhoneNumber}
+                      {details.phoneNumber}
                     </Typography>
                   </Grid>
                 </>
@@ -473,7 +502,7 @@ export default function PersonalProfile() {
                       label="Current Address"
                       variant="standard"
                       name="currentAddress"
-                      value={details.currentAddress}
+                      value={details.addresses.currentAddress}
                       onChange={handleChange}
                       fullWidth
                     />
@@ -483,7 +512,7 @@ export default function PersonalProfile() {
                       label="Permanent Address"
                       variant="standard"
                       name="permanentAddress"
-                      value={details.permanentAddress}
+                      value={details.addresses.permanentAddress}
                       onChange={handleChange}
                       fullWidth
                     />
@@ -493,7 +522,7 @@ export default function PersonalProfile() {
                       label="House Type"
                       variant="standard"
                       name="houseType"
-                      value={details.houseType}
+                      value={details.addresses.houseType}
                       onChange={handleChange}
                       fullWidth
                     />
@@ -503,7 +532,7 @@ export default function PersonalProfile() {
                       label="Staying at Current Residence Since"
                       variant="standard"
                       name="currentResidenceSince"
-                      value={details.currentResidenceSince}
+                      value={details.addresses.currentResidenceSince}
                       onChange={handleChange}
                       fullWidth
                     />
@@ -513,7 +542,7 @@ export default function PersonalProfile() {
                       label="Living in Current City Since"
                       variant="standard"
                       name="currentCitySince"
-                      value={details.currentCitySince}
+                      value={details.addresses.currentCitySince}
                       onChange={handleChange}
                       fullWidth
                     />
@@ -535,7 +564,7 @@ export default function PersonalProfile() {
                       Current Address
                     </Typography>
                     <Typography variant="body2" color="#808080">
-                      {details.currentAddress}
+                      {details.addresses.currentAddress}
                     </Typography>
                   </Grid>
                   <Grid item xs={6} md={6}>
@@ -543,7 +572,7 @@ export default function PersonalProfile() {
                       Permanent Address
                     </Typography>
                     <Typography variant="body2" color="#808080">
-                      {details.permanentAddress}
+                      {details.addresses.permanentAddress}
                     </Typography>
                   </Grid>
                   <Grid item xs={6} md={6}>
@@ -551,7 +580,7 @@ export default function PersonalProfile() {
                       House Type
                     </Typography>
                     <Typography variant="body2" color="#808080">
-                      {details.houseType}
+                      {details.addresses.houseType}
                     </Typography>
                   </Grid>
                   <Grid item xs={6} md={6}>
@@ -559,7 +588,7 @@ export default function PersonalProfile() {
                       Staying at Current Residence Since
                     </Typography>
                     <Typography variant="body2" color="#808080">
-                      {details.currentResidenceSince}
+                      {details.addresses.currentResidenceSince}
                     </Typography>
                   </Grid>
                   <Grid item xs={6} md={6}>
@@ -567,7 +596,7 @@ export default function PersonalProfile() {
                       Living in Current City Since
                     </Typography>
                     <Typography variant="body2" color="#808080">
-                      {details.currentCitySince}
+                      {details.addresses.currentCitySince}
                     </Typography>
                   </Grid>
                 </>
@@ -614,7 +643,7 @@ export default function PersonalProfile() {
                       label="LinkedIn"
                       variant="standard"
                       name="linkedin"
-                      value={details.linkedin}
+                      value={details.socialProfile.linkedin}
                       onChange={handleChange}
                       fullWidth
                     />
@@ -624,7 +653,7 @@ export default function PersonalProfile() {
                       label="Facebook"
                       variant="standard"
                       name="facebook"
-                      value={details.facebook}
+                      value={details.socialProfile.facebook}
                       onChange={handleChange}
                       fullWidth
                     />
@@ -634,7 +663,7 @@ export default function PersonalProfile() {
                       label="Twitter"
                       variant="standard"
                       name="twitter"
-                      value={details.twitter}
+                      value={details.socialProfile.twitter}
                       onChange={handleChange}
                       fullWidth
                     />
@@ -651,29 +680,31 @@ export default function PersonalProfile() {
                 </>
               ) : (
                 <>
-                  <Grid item xs={12} spacing={2}>
-                    <LinkedInIcon
-                      sx={{
-                        color: "#0080ff",
-                        cursor: "pointer",
-                        "&:hover": { color: "#0056b3" },
-                      }}
-                    />
+                  <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                      <LinkedInIcon
+                        sx={{
+                          color: "#0080ff",
+                          cursor: "pointer",
+                          "&:hover": { color: "#0056b3" },
+                        }}
+                      />
 
-                    <FacebookRoundedIcon
-                      sx={{
-                        color: "#0040ff",
-                        cursor: "pointer",
-                        "&:hover": { color: "#002080" },
-                      }}
-                    />
-                    <TwitterIcon
-                      sx={{
-                        color: "#00bfff",
-                        cursor: "pointer",
-                        "&:hover": { color: "#0080ff" },
-                      }}
-                    />
+                      <FacebookRoundedIcon
+                        sx={{
+                          color: "#0040ff",
+                          cursor: "pointer",
+                          "&:hover": { color: "#002080" },
+                        }}
+                      />
+                      <TwitterIcon
+                        sx={{
+                          color: "#00bfff",
+                          cursor: "pointer",
+                          "&:hover": { color: "#0080ff" },
+                        }}
+                      />
+                    </Grid>
                   </Grid>
                 </>
               )}
@@ -684,21 +715,3 @@ export default function PersonalProfile() {
     </>
   );
 }
-
-<Grid item xs={12}>
-  <Paper elevation={3} sx={{ padding: "20px", textAlign: "initial" }}>
-    <Grid container spacing={2}>
-      <Grid item xs={12}>
-        <Typography
-          variant="body1"
-          textTransform="uppercase"
-          color="#936c6c"
-          fontWeight="bold"
-        >
-          Social Profile
-        </Typography>
-        <Divider variant="fullWidth" sx={{ backgroundColor: "#424242" }} />
-      </Grid>
-    </Grid>
-  </Paper>
-</Grid>;
