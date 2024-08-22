@@ -30,7 +30,6 @@ import HrManagement from "../components/website/HrManagement";
 import Login from "../components/website/Login";
 import Payroll from "../components/website/Payroll";
 import Recruitment from "../components/website/Recruitment";
-import SetPassword from "../components/website/SetPassword";
 import TimeAttendance from "../components/website/TimeAttendance";
 import Logs from "./../components/app/Admin/attendance/Logs";
 import Settings from "../components/app/Admin/attendance/Settings";
