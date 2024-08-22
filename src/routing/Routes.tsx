@@ -44,7 +44,7 @@ export const websiteRoutes: RouteComponent[] = [
   { path: "/time-attendance", component: <TimeAttendance /> },
   { path: "/contact-us", component: <Contact /> },
   { path: "/login", component: <Login /> },
-  { path: "/set-password", component: <SetPassword /> },
+  // { path: "/set-password", component: <SetPassword /> },
 ];
 
 // app routes

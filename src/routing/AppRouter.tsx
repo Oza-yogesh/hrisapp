@@ -6,6 +6,7 @@ import { RouteComponent } from "../components/interfaces/Interfaces";
 import Home from "../components/website/Home";
 import Layout from "../components/website/Layout";
 import { appRoutes, websiteRoutes, adminRoutes } from "./Routes";
+import CreatePassword from "../components/app/auth/CreatePassword";
 
 const AppRouter: FC = () => {
   return (
@@ -40,16 +41,21 @@ const AppRouter: FC = () => {
           </Route>
           <Route path="/dashboard/admin" element={<Dashboard />}>
             <Route index element={<MainDashboard />} />
-            {adminRoutes.map((componentObject: RouteComponent, index: number) => (
-              <Fragment key={index}>
-                <Route
-                  caseSensitive
-                  path={componentObject.path.toLowerCase()}
-                  element={componentObject.component}
-                />
-              </Fragment>
-            ))}
+            {adminRoutes.map(
+              (componentObject: RouteComponent, index: number) => (
+                <Fragment key={index}>
+                  <Route
+                    caseSensitive
+                    path={componentObject.path.toLowerCase()}
+                    element={componentObject.component}
+                  />
+                </Fragment>
+              )
+            )}
           </Route>
+        </Routes>
+        <Routes>
+          <Route path="/set-password" element={<CreatePassword />} />
         </Routes>
       </BrowserRouter>
     </Fragment>
