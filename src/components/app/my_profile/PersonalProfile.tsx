@@ -19,12 +19,15 @@ import { FormLabel } from "react-bootstrap";
 import FemaleIcon from "@mui/icons-material/Female";
 import MaleIcon from "@mui/icons-material/Male";
 import TransgenderIcon from "@mui/icons-material/Transgender";
-import axios from "axios";
 import { EmployeeDetails } from "../../interfaces/Interfaces";
 import { getRequest } from "../../../api/Api";
 import { GET_EMPLOYEE_DETAILS_BY_ID } from "../../../api/Server";
+import { useParams } from "react-router-dom";
+import ProfilePhotoUpload from "./ProfilePhotoUpload";
 
 export default function PersonalProfile() {
+  const { id } = useParams();
+
   type Section = "personalInfo" | "contactInfo" | "addresses" | "socialProfile";
 
   const [isEditing, setIsEditing] = useState({
@@ -87,9 +90,7 @@ export default function PersonalProfile() {
   });
 
   useEffect(() => {
-    const employeeId = "66a201472ab048390c138c35";
-
-    getRequest(`${GET_EMPLOYEE_DETAILS_BY_ID}/${employeeId}`)
+    getRequest(`${GET_EMPLOYEE_DETAILS_BY_ID}/${id}`)
       .then((response) => {
         setDetails(response.data);
         setSelectedValue(response.data.gender.toLowerCase());
@@ -100,7 +101,7 @@ export default function PersonalProfile() {
           error
         );
       });
-  }, []);
+  }, [id]);
 
   const [selectedValue, setSelectedValue] = useState("");
 
@@ -150,6 +151,11 @@ export default function PersonalProfile() {
           margin: " auto",
         }}
       >
+        <div>
+          <div style={{ position: "absolute", top: "100px", left: "200px" }}>
+            <ProfilePhotoUpload />
+          </div>
+        </div>
         <Grid item xs={12}>
           <Paper elevation={3} sx={{ padding: "20px", textAlign: "initial" }}>
             <Grid container spacing={2}>
@@ -171,6 +177,13 @@ export default function PersonalProfile() {
                 <IconButton
                   aria-label="edit"
                   onClick={() => handleEditClick("personalInfo")}
+                  sx={{
+                    opacity: 0,
+                    transition: "opacity 0.3s ease",
+                    "&:hover": {
+                      opacity: 1,
+                    },
+                  }}
                 >
                   <EditIcon />
                 </IconButton>
@@ -362,6 +375,13 @@ export default function PersonalProfile() {
                 <IconButton
                   aria-label="edit"
                   onClick={() => handleEditClick("contactInfo")}
+                  sx={{
+                    opacity: 0,
+                    transition: "opacity 0.3s ease",
+                    "&:hover": {
+                      opacity: 1,
+                    },
+                  }}
                 >
                   <EditIcon />
                 </IconButton>
@@ -485,6 +505,13 @@ export default function PersonalProfile() {
                 <IconButton
                   aria-label="edit"
                   onClick={() => handleEditClick("addresses")}
+                  sx={{
+                    opacity: 0,
+                    transition: "opacity 0.3s ease",
+                    "&:hover": {
+                      opacity: 1,
+                    },
+                  }}
                 >
                   <EditIcon />
                 </IconButton>
@@ -495,6 +522,8 @@ export default function PersonalProfile() {
                   sx={{ backgroundColor: "#424242" }}
                 />
               </Grid>
+
+              {/* address details  */}
               {isEditing.addresses ? (
                 <>
                   <Grid item xs={6} md={6}>
@@ -502,7 +531,11 @@ export default function PersonalProfile() {
                       label="Current Address"
                       variant="standard"
                       name="currentAddress"
-                      value={details.addresses.currentAddress}
+                      value={
+                        details.addresses
+                          ? details.addresses.currentAddress
+                          : ""
+                      }
                       onChange={handleChange}
                       fullWidth
                     />
@@ -512,7 +545,11 @@ export default function PersonalProfile() {
                       label="Permanent Address"
                       variant="standard"
                       name="permanentAddress"
-                      value={details.addresses.permanentAddress}
+                      value={
+                        details.addresses
+                          ? details.addresses.permanentAddress
+                          : ""
+                      }
                       onChange={handleChange}
                       fullWidth
                     />
@@ -564,7 +601,9 @@ export default function PersonalProfile() {
                       Current Address
                     </Typography>
                     <Typography variant="body2" color="#808080">
-                      {details.addresses.currentAddress}
+                      {details.addresses
+                        ? details.addresses.currentAddress
+                        : "N/A"}
                     </Typography>
                   </Grid>
                   <Grid item xs={6} md={6}>
@@ -572,7 +611,9 @@ export default function PersonalProfile() {
                       Permanent Address
                     </Typography>
                     <Typography variant="body2" color="#808080">
-                      {details.addresses.permanentAddress}
+                      {details.addresses
+                        ? details.addresses.permanentAddress
+                        : "N/A"}
                     </Typography>
                   </Grid>
                   <Grid item xs={6} md={6}>
@@ -580,7 +621,7 @@ export default function PersonalProfile() {
                       House Type
                     </Typography>
                     <Typography variant="body2" color="#808080">
-                      {details.addresses.houseType}
+                      {details.addresses ? details.addresses.houseType : "N/A"}
                     </Typography>
                   </Grid>
                   <Grid item xs={6} md={6}>
@@ -588,7 +629,9 @@ export default function PersonalProfile() {
                       Staying at Current Residence Since
                     </Typography>
                     <Typography variant="body2" color="#808080">
-                      {details.addresses.currentResidenceSince}
+                      {details.addresses
+                        ? details.addresses.currentResidenceSince
+                        : "N/A"}
                     </Typography>
                   </Grid>
                   <Grid item xs={6} md={6}>
@@ -596,7 +639,9 @@ export default function PersonalProfile() {
                       Living in Current City Since
                     </Typography>
                     <Typography variant="body2" color="#808080">
-                      {details.addresses.currentCitySince}
+                      {details.addresses
+                        ? details.addresses.currentCitySince
+                        : "N/A"}
                     </Typography>
                   </Grid>
                 </>
@@ -626,6 +671,13 @@ export default function PersonalProfile() {
                 <IconButton
                   aria-label="edit"
                   onClick={() => handleEditClick("socialProfile")}
+                  sx={{
+                    opacity: 0,
+                    transition: "opacity 0.3s ease",
+                    "&:hover": {
+                      opacity: 1,
+                    },
+                  }}
                 >
                   <EditIcon />
                 </IconButton>

@@ -54,9 +54,7 @@ const Mandatory_info: React.FC<Props> = ({
 
   const handleNext = () => {
     if (
-      formData.firstName &&
-      formData.lastName &&
-      formData.email &&
+      (formData.firstName && formData.lastName && formData.email) ||
       formData.phoneNumber
     ) {
       setValueForComponent(1);

@@ -53,7 +53,10 @@ export const appRoutes: RouteComponent[] = [
   { path: "/dashboard/team-details", component: <TeamProfile /> },
   { path: "/dashboard/educational-details", component: <EducationProfile /> },
   { path: "/dashboard/family-details", component: <FamilyProfile /> },
-  { path: "/dashboard/personal-details", component: <PersonalProfile /> },
+  {
+    path: "/dashboard/personal-details/:id",
+    component: <PersonalProfile />,
+  },
   { path: "/dashboard/bank-account", component: <BankAccount /> },
   { path: "/dashboard/declaration", component: <Declaration /> },
   { path: "/dashboard/salary-structure", component: <SalaryStructure /> },
