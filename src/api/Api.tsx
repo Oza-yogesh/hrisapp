@@ -29,3 +29,4 @@ export const postRequest = (
 ): Promise<AxiosResponse<any, any>> => {
   return getInitialized(contentType).post(url, data);
 };
+

@@ -5,8 +5,11 @@ import App from "./App";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
-import { store } from "./components/app/payroll/SetUpAdmin/CreateStructure/redux/store/store";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from "react-toastify";
+import store, { persistor } from "./redux/store";
+import { PersistGate } from "redux-persist/integration/react";
 
 const queryClient = new QueryClient();
 
@@ -17,7 +20,10 @@ root.render(
   <QueryClientProvider client={queryClient}>
     <StrictMode>
       <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
         <App />
+        <ToastContainer />
+        </PersistGate>
       </Provider>
     </StrictMode>
   </QueryClientProvider>

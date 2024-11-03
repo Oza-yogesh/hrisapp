@@ -3,110 +3,137 @@ import { Button, Container, Grid, TextField, Typography } from "@mui/material";
 import { AxiosError, AxiosResponse } from "axios";
 import { FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
-import { postRequest } from "../../api/Api";
-import { LOGIN } from "../../api/Server";
-import images from "../../images/images.json";
+import { postRequest } from "../../api/Api"; // Make sure this is correctly implemented
+import { LOGIN } from "../../api/Server"; // API endpoint for login
+import images from "../../images/images.json"; // Ensure images are correctly imported
+import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../redux/slices/userSlice"; // Action to set user in Redux store
 
 export default function Login() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault(); // Prevent default form submission
     try {
       const data = new FormData(event.currentTarget);
-      let loginData = {
-        email: data.get("email"),
-        password: data.get("password"),
+      const loginData = {
+        email: data.get("email") as string,
+        password: data.get("password") as string,
       };
 
-      postRequest(LOGIN, "", loginData)
-        .then((response: AxiosResponse) => {
-          if (response.status === 200) {
-            const userId = response.data.userId;
-            localStorage.setItem("userId", userId);
-            navigate("/dashboard");
-          }
-        })
-        .catch((error: AxiosError) => alert(error.response?.data));
+      const response: AxiosResponse = await postRequest(LOGIN, "", loginData);
+      if (response.status === 200) {
+        const { userId, token, role, message, user } = response.data;
+
+        // Extract user information from the user object
+        const { firstName, lastName, email,avatar } = user;
+
+        // Store data in local storage for session management
+        localStorage.setItem("token", token);
+        localStorage.setItem("Role", role);
+        localStorage.setItem("userId", userId);
+        // Dispatch user data to Redux store
+        dispatch(
+          setUser({
+            _id: userId,
+            firstName,
+            lastName,
+            email: email,
+            role,
+            avatar
+          })
+        );
+
+        // Notify user and navigate
+        toast.success(
+          message || "Login successful! Redirecting to your dashboard..."
+        );
+        navigate("/dashboard");
+      }
     } catch (error) {
-      console.error(error);
+      const axiosError = error as AxiosError; // Type assertion
+      const errorMessage = axiosError.response?.data
+        ? JSON.stringify(axiosError.response.data)
+        : "An unknown error occurred"; // Provide fallback message
+
+      toast.error(errorMessage); // Show error message
     }
   };
 
   return (
-    <>
-      <Container sx={{ mt: 10, mb: 5 }}>
-        <Grid container>
+    <Container sx={{ mt: 10, mb: 5 }}>
+      <Grid container>
+        <Grid
+          item
+          xs={12}
+          md={7}
+          component="img"
+          borderRadius={3}
+          src={`${images.logingInImage.src}`}
+          alt={`${images.logingInImage.alt}`}
+        />
+        <Grid item xs={12} md={5}>
           <Grid
-            item
-            xs={12}
-            md={7}
-            component="img"
-            borderRadius={3}
-            src={`${images.logingInImage.src}`}
-            alt={`${images.logingInImage.alt}`}
-          ></Grid>
-          <Grid item xs={12} md={5}>
-            <Grid
-              container
-              spacing={4}
-              padding={4}
-              component="form"
-              onSubmit={handleSubmit}
-            >
-              <Grid item xs={12}>
-                <Typography
-                  variant="h5"
-                  color="#191970"
-                  fontWeight="600"
-                  textTransform="uppercase"
-                  gutterBottom
-                >
-                  login
-                </Typography>
-                <Typography color="#9e9e9e" textTransform="capitalize">
-                  welcome to SAWA HRIS
-                </Typography>
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  autoFocus
-                  fullWidth
-                  id="email"
-                  size="medium"
-                  name="email"
-                  label="Email"
-                  type="email"
-                  autoComplete="username"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="password"
-                  size="medium"
-                  name="password"
-                  label="Password"
-                  type="password"
-                  autoComplete="current-password"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <Button
-                  variant="contained"
-                  type="submit"
-                  size="medium"
-                  startIcon={<VpnKeyIcon />}
-                >
-                  Login
-                </Button>
-              </Grid>
+            container
+            spacing={4}
+            padding={4}
+            component="form"
+            onSubmit={handleSubmit}
+          >
+            <Grid item xs={12}>
+              <Typography
+                variant="h5"
+                color="#191970"
+                fontWeight="600"
+                textTransform="uppercase"
+                gutterBottom
+              >
+                Login
+              </Typography>
+              <Typography color="#9e9e9e" textTransform="capitalize">
+                Welcome to SAWA HRIS
+              </Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                autoFocus
+                fullWidth
+                id="email"
+                size="medium"
+                name="email"
+                label="Email"
+                type="email"
+                autoComplete="username"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                id="password"
+                size="medium"
+                name="password"
+                label="Password"
+                type="password"
+                autoComplete="current-password"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Button
+                variant="contained"
+                type="submit"
+                size="medium"
+                startIcon={<VpnKeyIcon />}
+              >
+                Login
+              </Button>
             </Grid>
           </Grid>
         </Grid>
-      </Container>
-    </>
+      </Grid>
+    </Container>
   );
 }

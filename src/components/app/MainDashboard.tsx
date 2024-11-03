@@ -10,6 +10,8 @@ import { Container, Grid, Paper, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 export default function MainDashboard() {
+  const userId: string | null = localStorage.getItem("userId");
+  const userRole: string | null = localStorage.getItem("role"); // Get the user role
   const navigate = useNavigate();
 
   type MenusProps = {
@@ -85,7 +87,7 @@ export default function MainDashboard() {
           menu_name="My Profile"
           IconComponent={AccountCircleIcon}
           iconColor="#0080ff"
-          linkToNavigate="/dashboard/personal-details"
+          linkToNavigate={`/dashboard/personal-details/${userId}`}
         />
         <Menus
           menu_name="Directory"
@@ -102,7 +104,6 @@ export default function MainDashboard() {
       </Grid>
 
       {/* second Grid */}
-
       <Grid
         container
         sx={{
@@ -134,18 +135,22 @@ export default function MainDashboard() {
           iconColor="#211C6A"
           linkToNavigate="/dashboard/pay-slip"
         />
-        <Menus
-          menu_name="Recruitment"
-          IconComponent={PersonSearchIcon}
-          iconColor="#561C24"
-          linkToNavigate="/dashboard/company"
-        />
-        <Menus
-          menu_name="Onboarding New Employee"
-          IconComponent={Diversity3Icon}
-          iconColor="#B5B86B"
-          linkToNavigate="/dashboard/onboarding-new-employee"
-        />
+        {userRole === "admin" && (
+          <Menus
+            menu_name="Recruitment"
+            IconComponent={PersonSearchIcon}
+            iconColor="#561C24"
+            linkToNavigate="/dashboard/company"
+          />
+        )}
+        {userRole === "admin" && (
+          <Menus
+            menu_name="Onboarding New Employee"
+            IconComponent={Diversity3Icon}
+            iconColor="#B5B86B"
+            linkToNavigate="/dashboard/onboarding-new-employee"
+          />
+        )}
       </Grid>
     </Container>
   );

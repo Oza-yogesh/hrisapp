@@ -2,7 +2,6 @@ import Rules from "../components/app/Admin/attendance/rules/Rulesbar";
 import AdminCompanyProfile from "../components/app/Admin/compnay_profile/AdminCompanyProfile";
 import AdminDirectory from "../components/app/Admin/directory/AdminDirectory";
 import AdminVerify from "../components/app/Admin/verify/AdminVerify";
-
 import CompanyProfile from "../components/app/company_profile/CompanyProfile";
 import Directory from "../components/app/directory/Directory";
 import ApplyLeave from "../components/app/leave/ApplyLeave";
@@ -14,7 +13,6 @@ import TeamProfile from "../components/app/my_profile/TeamProfile";
 import WorkProfile from "../components/app/my_profile/WorkProfile";
 import WorkWeek from "../components/app/my_profile/WorkWeek";
 import OnboardEmployee from "../components/app/onboarding_employee/OnboardEmployee";
-import OptionalInfo from "../components/app/onboarding_employee/OptionalInfo";
 import Admin from "../components/app/payroll/Admin";
 
 import BankAccount from "../components/app/payroll/BankAccount";
@@ -33,6 +31,7 @@ import Recruitment from "../components/website/Recruitment";
 import TimeAttendance from "../components/website/TimeAttendance";
 import Logs from "./../components/app/Admin/attendance/Logs";
 import Settings from "../components/app/Admin/attendance/Settings";
+
 // website routes
 export const websiteRoutes: RouteComponent[] = [
   { path: "/about-us", component: <About /> },
@@ -61,11 +60,7 @@ export const appRoutes: RouteComponent[] = [
   { path: "/dashboard/declaration", component: <Declaration /> },
   { path: "/dashboard/salary-structure", component: <SalaryStructure /> },
   { path: "/dashboard/pay-slip", component: <PaySlip /> },
-  {
-    path: "/dashboard/onboarding-new-employee",
-    component: <OnboardEmployee />,
-  },
-
+  
   { path: "/dashboard/setup", component: <SetupPayroll /> },
   { path: "/dashboard/document", component: <DocumentProfile /> },
   { path: "/dashboard/admin", component: <Admin /> },
@@ -77,6 +72,10 @@ export const appRoutes: RouteComponent[] = [
 
 // Admin Routes
 export const adminRoutes: RouteComponent[] = [
+  {
+    path: "/dashboard/admin/onboarding-new-employee",
+    component: <OnboardEmployee />,
+  },
   {
     path: "/dashboard/admin/company-profile",
     component: <AdminCompanyProfile />,

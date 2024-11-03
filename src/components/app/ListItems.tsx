@@ -28,8 +28,28 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { FC, Fragment, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { SidebarItem, SidebarSubItem } from "../interfaces/Interfaces";
+import { RootState } from "../../redux/store";
+import { useSelector } from "react-redux";
 
+// Define the SidebarItem and SidebarSubItem interfaces
+interface SidebarItem {
+  id: string;
+  name: string;
+  subItem: boolean;
+  icon: JSX.Element;
+  path?: string;
+  roles: string[]; // Array of roles that can access the item
+}
+
+interface SidebarSubItem {
+  id: string;
+  list: SidebarItem[];
+}
+
+// Retrieve the user role from local storage
+const userId: any = localStorage.getItem("userId");
+
+// Define the main sidebar items with roles
 const mainList: SidebarItem[] = [
   {
     id: "dashboard",
@@ -37,6 +57,7 @@ const mainList: SidebarItem[] = [
     subItem: false,
     icon: <DashboardIcon />,
     path: "/dashboard",
+    roles: ["admin", "user"],
   },
   {
     id: "companyProfile",
@@ -44,37 +65,75 @@ const mainList: SidebarItem[] = [
     subItem: false,
     icon: <BusinessIcon />,
     path: "company-profile",
+    roles: ["admin", "user"],
   },
-  { id: "myProfile", name: "My Profile", subItem: true, icon: <PersonIcon /> },
+  {
+    id: "myProfile",
+    name: "My Profile",
+    subItem: true,
+    icon: <PersonIcon />,
+    roles: ["admin", "user"],
+  },
   {
     id: "directory",
     name: "Directory",
     subItem: false,
     icon: <BarChartIcon />,
     path: "/dashboard/directory",
+    roles: ["admin", "user"],
   },
   {
     id: "attendance",
     name: "Attendance",
     subItem: true,
     icon: <AssignmentIcon />,
+    roles: ["admin", "user"],
   },
-  { id: "leave", name: "Leave", subItem: true, icon: <BackpackIcon /> },
-  { id: "payroll", name: "Payroll", subItem: true, icon: <PaymentsIcon /> },
+  {
+    id: "leave",
+    name: "Leave",
+    subItem: true,
+    icon: <BackpackIcon />,
+    roles: ["admin", "user"],
+  },
+  {
+    id: "payroll",
+    name: "Payroll",
+    subItem: true,
+    icon: <PaymentsIcon />,
+    roles: ["admin", "user"],
+  },
   {
     id: "recruitment",
     name: "Recruitment",
     subItem: false,
     icon: <PersonSearchIcon />,
     path: "recruitment-details",
+    roles: ["admin"],
   },
-
   {
     id: "onboard-employee",
     name: "Onboarding Employee",
     subItem: false,
     icon: <PersonSearchIcon />,
     path: "onboarding-new-employee",
+    roles: ["admin"], // Only visible to admin
+  },
+  {
+    id: "SetupPayroll",
+    name: "Setup Payroll",
+    subItem: false,
+    icon: <AccountBalanceIcon />,
+    path: "/dashboard/setup",
+    roles: ["admin"], // Only visible to admin
+  },
+  {
+    id: "admin",
+    name: "Admin",
+    subItem: false,
+    icon: <TabIcon />,
+    path: "/dashboard/admin",
+    roles: ["admin"], // Only visible to admin
   },
 ];
 
@@ -87,7 +146,8 @@ const subList: SidebarSubItem[] = [
         name: "Personal",
         subItem: false,
         icon: <AccountCircleIcon />,
-        path: "personal-details",
+        path: `personal-details/${userId}`,
+        roles: ["admin", "user"],
       },
       {
         id: "work",
@@ -95,6 +155,7 @@ const subList: SidebarSubItem[] = [
         subItem: false,
         icon: <WorkIcon />,
         path: "work-details",
+        roles: ["admin", "user"],
       },
       {
         id: "workweek",
@@ -102,6 +163,7 @@ const subList: SidebarSubItem[] = [
         subItem: false,
         icon: <TabIcon />,
         path: "/dashboard/work-week",
+        roles: ["admin", "user"],
       },
       {
         id: "team",
@@ -109,6 +171,7 @@ const subList: SidebarSubItem[] = [
         subItem: false,
         icon: <GroupsIcon />,
         path: "team-details",
+        roles: ["admin", "user"],
       },
       {
         id: "education",
@@ -116,6 +179,7 @@ const subList: SidebarSubItem[] = [
         subItem: false,
         icon: <SchoolIcon />,
         path: "educational-details",
+        roles: ["admin", "user"],
       },
       {
         id: "family",
@@ -123,6 +187,7 @@ const subList: SidebarSubItem[] = [
         subItem: false,
         icon: <Diversity1Icon />,
         path: "family-details",
+        roles: ["admin", "user"],
       },
       {
         id: "documents",
@@ -130,25 +195,34 @@ const subList: SidebarSubItem[] = [
         subItem: false,
         icon: <TabIcon />,
         path: "/dashboard/document",
+        roles: ["admin", "user"],
       },
       {
         id: "fileManager",
-        name: "File Manger",
+        name: "File Manager",
         subItem: false,
         icon: <FolderIcon />,
+        roles: ["admin", "user"],
       },
     ],
   },
   {
     id: "attendance",
     list: [
-      { id: "log", name: "Log", subItem: false, icon: <LoginIcon /> },
+      {
+        id: "log",
+        name: "Log",
+        subItem: false,
+        icon: <LoginIcon />,
+        roles: ["admin", "user"],
+      },
       {
         id: "automationLog",
         name: "Automation Log",
         subItem: false,
         icon: <AutoModeIcon />,
         path: "/dashboard/admin/attendance/logs",
+        roles: ["admin"], // Only visible to admin
       },
       {
         id: "rules",
@@ -156,6 +230,7 @@ const subList: SidebarSubItem[] = [
         subItem: false,
         icon: <RuleIcon />,
         path: "/dashboard/admin/attendance/Settings",
+        roles: ["admin"], // Only visible to admin
       },
       {
         id: "settings",
@@ -163,6 +238,7 @@ const subList: SidebarSubItem[] = [
         subItem: false,
         icon: <RuleIcon />,
         path: "/dashboard/admin/attendance/Settings",
+        roles: ["admin"], // Only visible to admin
       },
     ],
   },
@@ -174,10 +250,23 @@ const subList: SidebarSubItem[] = [
         name: "Apply Leave",
         subItem: false,
         icon: <ExitToAppIcon />,
-        path:"/dashboard/apply-leave"
+        path: "/dashboard/apply-leave",
+        roles: ["admin", "user"],
       },
-      { id: "logs", name: "Logs", subItem: false, icon: <AutoModeIcon /> },
-      { id: "rules", name: "Rules", subItem: false, icon: <RuleIcon /> },
+      {
+        id: "logs",
+        name: "Logs",
+        subItem: false,
+        icon: <AutoModeIcon />,
+        roles: ["admin", "user"],
+      },
+      {
+        id: "rules",
+        name: "Rules",
+        subItem: false,
+        icon: <RuleIcon />,
+        roles: ["admin", "user"],
+      },
     ],
   },
   {
@@ -189,6 +278,7 @@ const subList: SidebarSubItem[] = [
         subItem: false,
         icon: <ReceiptSharpIcon />,
         path: "/dashboard/pay-slip",
+        roles: ["admin", "user"],
       },
       {
         id: "salaryStructure",
@@ -196,6 +286,7 @@ const subList: SidebarSubItem[] = [
         subItem: false,
         icon: <CurrencyExchangeSharpIcon />,
         path: "/dashboard/salary-structure",
+        roles: ["admin", "user"],
       },
       {
         id: "declaration",
@@ -203,6 +294,7 @@ const subList: SidebarSubItem[] = [
         subItem: false,
         icon: <SubtitlesIcon />,
         path: "/dashboard/declaration",
+        roles: ["admin", "user"],
       },
       {
         id: "bankAccount",
@@ -210,14 +302,15 @@ const subList: SidebarSubItem[] = [
         subItem: false,
         icon: <AccountBalanceIcon />,
         path: "/dashboard/bank-account",
+        roles: ["admin", "user"],
       },
-
       {
         id: "SetupPayroll",
         name: "Setup Payroll",
         subItem: false,
         icon: <AccountBalanceIcon />,
         path: "/dashboard/setup",
+        roles: ["admin"], // Only visible to admin
       },
       {
         id: "admin",
@@ -225,6 +318,7 @@ const subList: SidebarSubItem[] = [
         subItem: false,
         icon: <TabIcon />,
         path: "/dashboard/admin",
+        roles: ["admin"], // Only visible to admin
       },
     ],
   },
@@ -233,6 +327,16 @@ const subList: SidebarSubItem[] = [
 export const MainListItems: FC = () => {
   const navigate = useNavigate();
   const [openCollapse, setOpenCollapse] = useState<string | null>(null);
+  const userRole: string | null = useSelector(
+    (state: RootState) => state.user.role
+  );
+
+  // Filter the main list based on user role
+  const filteredMainList = mainList.filter((item) =>
+    item.roles.includes(userRole as string)
+  );
+
+  console.log({ userRole });
 
   const handleItemClick = (
     itemId: string,
@@ -251,7 +355,7 @@ export const MainListItems: FC = () => {
   return (
     <Fragment>
       <List component="nav">
-        {mainList.map((listItem: SidebarItem) => (
+        {filteredMainList.map((listItem: SidebarItem) => (
           <Fragment key={listItem.id}>
             <ListItemButton
               onClick={() =>
@@ -279,7 +383,10 @@ export const MainListItems: FC = () => {
                       (subListObject: SidebarSubItem) =>
                         listItem.id === subListObject.id
                     )
-                    ?.list.map((itemObject: SidebarItem) => (
+                    ?.list.filter((item) =>
+                      item.roles.includes(userRole as string)
+                    )
+                    .map((itemObject: SidebarItem) => (
                       <ListItemButton
                         key={itemObject.id}
                         onClick={() =>

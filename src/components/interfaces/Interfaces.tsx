@@ -108,3 +108,8 @@ export interface EmployeeDetails {
   }[];
   __v: number;
 }
+
+export interface RouteComponent {
+  path: string;
+  component: JSX.Element;
+}

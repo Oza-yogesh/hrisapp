@@ -43,8 +43,6 @@ const CustomSelect: FC<{
     setShowOptions(value.length > 0);
   };
 
-
-  //Handle
   const handleOptionClick = (option: Employee) => {
     setInputValue(option.name || "");
     setShowOptions(false);
@@ -59,7 +57,7 @@ const CustomSelect: FC<{
   };
 
   return (
-    <div style={{ position: "relative", width: "100%" }}>
+    <div style={{ position: "relative", width: "100%", height: "70px" }}>
       <StyledInputBase
         value={inputValue}
         onChange={handleInputChange}
