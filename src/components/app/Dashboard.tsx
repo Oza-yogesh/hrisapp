@@ -95,14 +95,13 @@ const Dashboard: FC = () => {
 
   const handleCloseUserMenu = (button: string) => {
     if (button === "Logout") {
-      // Dispatch clearUser action to reset Redux store
-      dispatch(clearUser());
-
       // Remove token, Role from local storage
       localStorage.removeItem("token");
       localStorage.removeItem("userId");
       localStorage.removeItem("Role");
-      localStorage.removeItem("persist:root");
+
+      // Dispatch clearUser action to reset Redux store
+      dispatch(clearUser());
 
       // Navigate to login page
       navigate("/login");
@@ -111,9 +110,7 @@ const Dashboard: FC = () => {
   };
 
   // Create initials from first and last name
-  const userInitials = `${user.firstName?.charAt(0)}${user.lastName?.charAt(
-    0
-  )}`.toUpperCase();
+  const userInitials = `${user.firstName?.charAt(0)}${user.lastName?.charAt(0)}`.toUpperCase();
 
   return (
     <ThemeProvider theme={theme}>
