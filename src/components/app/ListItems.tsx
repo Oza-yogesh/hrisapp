@@ -204,6 +204,13 @@ const subList: SidebarSubItem[] = [
         icon: <FolderIcon />,
         roles: ["admin", "user"],
       },
+      {
+        id: "stationery",
+        name: "Stationery",
+        subItem: false,
+        icon: <FolderIcon />,
+        roles: ["admin", "user"],
+      },
     ],
   },
   {
