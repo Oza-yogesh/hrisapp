@@ -7,14 +7,23 @@ import Home from "../components/website/Home";
 import Layout from "../components/website/Layout";
 import { appRoutes, websiteRoutes, adminRoutes } from "./Routes";
 import CreatePassword from "../components/app/auth/CreatePassword";
-import ProtectedRoute, { RedirectIfAuthenticated } from "../components/ProtectedRoute";
+import ProtectedRoute, {
+  RedirectIfAuthenticated,
+} from "../components/ProtectedRoute";
 
 const AppRouter: FC = () => {
   return (
     <Fragment>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Layout />}>
+          <Route
+            path="/"
+            element={
+              <RedirectIfAuthenticated>
+                <Layout />
+              </RedirectIfAuthenticated>
+            }
+          >
             <Route index element={<Home />} />
             {websiteRoutes.map(
               (componentObject: RouteComponent, index: number) => (
@@ -24,7 +33,7 @@ const AppRouter: FC = () => {
                     path={componentObject.path.toLowerCase()}
                     element={
                       <RedirectIfAuthenticated>
-                      {componentObject.component}
+                        {componentObject.component}
                       </RedirectIfAuthenticated>
                     }
                   />
