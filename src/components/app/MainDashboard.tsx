@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function MainDashboard() {
   const userId: string | null = localStorage.getItem("userId");
-  const userRole: string | null = localStorage.getItem("role"); // Get the user role
+  const userRole: string | null = localStorage.getItem("role");
   const navigate = useNavigate();
 
   type MenusProps = {
