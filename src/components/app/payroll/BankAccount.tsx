@@ -52,7 +52,7 @@ const BankAccount = () => {
     setDetails((prevDetails) => ({
       ...prevDetails,
       accountHolderName: "Yogesh Mathuralal Oza",
-      bankName: "KOTAK MAHIN NARAYAN LAXMI ROAD BRANCH",
+      bankName: "KOTAK MAHIN NARAYAN",
       accountNumber: "0713952696",
       branchName: "NARAYAN LAXMI ROAD BRANCH",
       city: "PUNE",
@@ -164,11 +164,20 @@ const BankAccount = () => {
                       onChange={handleChange}
                       fullWidth
                     />
+
                     <TextField
                       variant="standard"
                       label="City"
                       name="city"
                       value={details.city}
+                      onChange={handleChange}
+                      fullWidth
+                    />
+                    <TextField
+                      variant="standard"
+                      label="Account Number"
+                      name="accountNumber"
+                      value={details.accountNumber}
                       onChange={handleChange}
                       fullWidth
                     />
@@ -187,14 +196,6 @@ const BankAccount = () => {
                       label="IFSC Code"
                       name="ifscCode"
                       value={details.ifscCode}
-                      onChange={handleChange}
-                      fullWidth
-                    />
-                    <TextField
-                      variant="standard"
-                      label="Account Number"
-                      name="accountNumber"
-                      value={details.accountNumber}
                       onChange={handleChange}
                       fullWidth
                     />
@@ -285,7 +286,7 @@ const BankAccount = () => {
                             fontWeight: 700,
                             color: "black",
                             fontSize: "1rem",
-                            mt: 3,
+                            mt: 4,
                           }}
                         >
                           <strong>City:</strong>
@@ -345,7 +346,7 @@ const BankAccount = () => {
                             fontWeight: 700,
                             color: "black",
                             fontSize: "1rem",
-                            mt: 3,
+                            mt: 4,
                           }}
                         >
                           <strong>IFSC Code:</strong>
