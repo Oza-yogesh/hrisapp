@@ -29,7 +29,7 @@ const BankAccount = () => {
   const [openDialog, setOpenDialog] = useState<boolean>(false);
 
   const [details, setDetails] = useState({
-    accountHolderName: "Yogesh Mathuralal Oza",
+    accountHolderName: "Vaishnavi Gatade",
     bankName: "KOTAK MAHINDRA BANK LIMITED",
     accountNumber: "0713952696",
     branchName: "NARAYAN LAXMI ROAD BRANCH",
@@ -51,13 +51,6 @@ const BankAccount = () => {
     setIsEditing(false);
     setDetails((prevDetails) => ({
       ...prevDetails,
-      accountHolderName: "Yogesh Mathuralal Oza",
-      bankName: "KOTAK MAHIN NARAYAN",
-      accountNumber: "0713952696",
-      branchName: "NARAYAN LAXMI ROAD BRANCH",
-      city: "PUNE",
-      ifscCode: "KKBK0001775",
-      effectiveDate: "",
     }));
   };
 
@@ -85,13 +78,13 @@ const BankAccount = () => {
         <ProfilePhotoUpload />
       </div>
       <Box
-        sx={{ m: 5, ml: 30 }}
+        sx={{ m: 5, ml: 30, p: 2 }}
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
       >
         <Grid item xs={12}>
-          <Paper elevation={3} sx={{ padding: "20px", textAlign: "initial" }}>
-            <Box>
+          <Paper elevation={3} sx={{ padding: "10px", textAlign: "initial" }}>
+            <Box sx={{ pl: 2 }}>
               <Box
                 sx={{
                   display: "flex",
@@ -109,11 +102,14 @@ const BankAccount = () => {
                 >
                   Salary Account Details
                 </Typography>
-                {hover && !isEditing && (
-                  <IconButton onClick={handleEditClick}>
-                    <EditIcon fontSize="small" />
-                  </IconButton>
-                )}
+                <IconButton
+                  onClick={handleEditClick}
+                  sx={{
+                    visibility: hover && !isEditing ? "visible" : "hidden",
+                  }}
+                >
+                  <EditIcon fontSize="small" />
+                </IconButton>
               </Box>
 
               {isEditing ? (
@@ -164,20 +160,11 @@ const BankAccount = () => {
                       onChange={handleChange}
                       fullWidth
                     />
-
                     <TextField
                       variant="standard"
                       label="City"
                       name="city"
                       value={details.city}
-                      onChange={handleChange}
-                      fullWidth
-                    />
-                    <TextField
-                      variant="standard"
-                      label="Account Number"
-                      name="accountNumber"
-                      value={details.accountNumber}
                       onChange={handleChange}
                       fullWidth
                     />
@@ -196,6 +183,14 @@ const BankAccount = () => {
                       label="IFSC Code"
                       name="ifscCode"
                       value={details.ifscCode}
+                      onChange={handleChange}
+                      fullWidth
+                    />
+                    <TextField
+                      variant="standard"
+                      label="Account Number"
+                      name="accountNumber"
+                      value={details.accountNumber}
                       onChange={handleChange}
                       fullWidth
                     />
@@ -466,7 +461,6 @@ const BankAccount = () => {
             <Divider
               sx={{
                 flexGrow: 1,
-                borderColor: "#1976d2",
                 borderWidth: "1px",
               }}
             />
@@ -474,8 +468,7 @@ const BankAccount = () => {
             <Divider
               sx={{
                 flexGrow: 1,
-                borderColor: "#1976d2",
-                borderWidth: "1px",
+                borderWidth: "1.5px",
               }}
             />
           </Box>
@@ -484,7 +477,10 @@ const BankAccount = () => {
               <InputLabel>Select Bank</InputLabel>
               <Select
                 sx={{
-                  ".MuiOutlinedInput-notchedOutline": { border: 0 },
+                  ".MuiOutlinedInput-notchedOutline": { display: "none" },
+                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                    display: "none",
+                  },
                   borderBottom: 1,
                 }}
               >
@@ -496,7 +492,10 @@ const BankAccount = () => {
               <InputLabel>Select State</InputLabel>
               <Select
                 sx={{
-                  ".MuiOutlinedInput-notchedOutline": { border: 0 },
+                  ".MuiOutlinedInput-notchedOutline": { display: "none" },
+                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                    display: "none",
+                  },
                   borderBottom: 1,
                 }}
               >
@@ -510,7 +509,10 @@ const BankAccount = () => {
               <InputLabel>Select City</InputLabel>
               <Select
                 sx={{
-                  ".MuiOutlinedInput-notchedOutline": { border: 0 },
+                  ".MuiOutlinedInput-notchedOutline": { display: "none" },
+                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                    display: "none",
+                  },
                   borderBottom: 1,
                 }}
               >
@@ -522,7 +524,10 @@ const BankAccount = () => {
               <InputLabel>Select Branch</InputLabel>
               <Select
                 sx={{
-                  ".MuiOutlinedInput-notchedOutline": { border: 0 },
+                  ".MuiOutlinedInput-notchedOutline": { display: "none" },
+                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                    display: "none",
+                  },
                   borderBottom: 1,
                 }}
               >
