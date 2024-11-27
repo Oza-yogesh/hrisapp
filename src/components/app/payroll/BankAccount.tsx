@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Typography,
@@ -22,11 +22,45 @@ import SearchIcon from "@mui/icons-material/Search";
 import ActionButtons from "../common/ActionButton";
 import CloseIcon from "@mui/icons-material/Close";
 import ProfilePhotoUpload from "../my_profile/ProfilePhotoUpload";
+import axios from "axios";
+import CustomTextField from "../common/CustomTextField";
+
+interface BankDetails {
+  IFSC: string;
+  MICR: string;
+  BANK: string;
+  ADDRESS: string;
+  DISTRICT: string;
+  STATE: string;
+}
+// Fields to display
+const fieldsToDisplay = [
+  { key: "IFSC", label: "IFSC Code" },
+  { key: "MICR", label: "MICR Code" },
+  { key: "BANK", label: "Bank" },
+  { key: "ADDRESS", label: "Address" },
+  { key: "DISTRICT", label: "District" },
+  { key: "STATE", label: "State" },
+  { key: "PHONE", label: "Phone Number" },
+];
 
 const BankAccount = () => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [hover, setHover] = useState<boolean>(false);
   const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const [openDialog2, setOpenDialog2] = useState<boolean>(false);
+  const [ifscCode, setIfscecode] = useState<String>("");
+  const [error, setError] = useState<String>("");
+  const [bankDetails, setBankDetails] = useState<BankDetails | null>(null);
+  const [banks, setBanks] = useState([]); // List of banks
+  const [states, setStates] = useState([]); // List of states for the selected bank
+  const [cities, setCities] = useState([]); // List of cities for the selected state
+  const [branches, setBranches] = useState([]); // List of branches for the selected city
+
+  const [selectedBank, setSelectedBank] = useState("");
+  const [selectedState, setSelectedState] = useState("");
+  const [selectedCity, setSelectedCity] = useState("");
+  const [selectedBranch, setSelectedBranch] = useState("");
 
   const [details, setDetails] = useState({
     accountHolderName: "Vaishnavi Gatade",
@@ -39,12 +73,11 @@ const BankAccount = () => {
   });
 
   const handleEditClick = () => {
-    setIsEditing(true); // Enable editing mode
+    setIsEditing(true);
   };
 
   const handleSaveClick = () => {
-    setIsEditing(false); // Disable editing mode
-    // Optionally, you can handle saving logic here (e.g., sending data to the backend)
+    setIsEditing(false);
   };
 
   const handleCancelClick = () => {
@@ -72,6 +105,79 @@ const BankAccount = () => {
     setOpenDialog(false);
   };
 
+  const handleDialogOpen2 = () => {
+    setOpenDialog2(true);
+  };
+
+  const handleDialogClose2 = () => {
+    setOpenDialog2(false);
+  };
+
+  const handleSearch = async () => {
+    if (!ifscCode) {
+      setError("Please enter an IFSC code.");
+      return;
+    }
+    setError("");
+    setBankDetails(null);
+
+    try {
+      const response = await axios.get<BankDetails>(
+        `https://ifsc.razorpay.com/${ifscCode}`
+      );
+      setBankDetails(response.data);
+      console.log(response.data);
+    } catch (error) {
+      setError("Unable to fetch bank details. Please check the IFSC code.");
+    }
+  };
+  useEffect(() => {
+    if (!ifscCode) return;
+
+    handleSearch();
+  }, [ifscCode]);
+
+  // Consolidated useEffect to manage dropdowns
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (!selectedBank) {
+          // Fetch all banks
+          const response = await axios.get("https://ifsc.razorpay.com/");
+          setBanks(Object.keys(response.data)); // Adjust this based on the API response
+          setStates([]);
+          setCities([]);
+          setBranches([]);
+        } else if (selectedBank && !selectedState) {
+          // Fetch states for the selected bank
+          const response = await axios.get(
+            `https://ifsc.razorpay.com/${selectedBank}`
+          );
+          setStates(Object.keys(response.data)); // Adjust this based on the API response
+          setCities([]);
+          setBranches([]);
+        } else if (selectedBank && selectedState && !selectedCity) {
+          // Fetch cities for the selected state
+          const response = await axios.get(
+            `https://ifsc.razorpay.com/${selectedBank}/${selectedState}`
+          );
+          setCities(Object.keys(response.data)); // Adjust this based on the API response
+          setBranches([]);
+        } else if (selectedBank && selectedState && selectedCity) {
+          // Fetch branches for the selected city
+          const response = await axios.get(
+            `https://ifsc.razorpay.com/${selectedBank}/${selectedState}/${selectedCity}`
+          );
+          setBranches(response.data); // Adjust this based on the API response
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [selectedBank, selectedState, selectedCity]);
+
   return (
     <>
       <div style={{ position: "absolute", top: "100px", left: "200px" }}>
@@ -97,7 +203,7 @@ const BankAccount = () => {
                   variant="body1"
                   textTransform="uppercase"
                   color="#000000"
-                  fontWeight="bold"
+                  fontWeight="800"
                   sx={{ fontSize: "0.9rem" }}
                 >
                   Salary Account Details
@@ -115,26 +221,50 @@ const BankAccount = () => {
               {isEditing ? (
                 <Box component="form">
                   <Box sx={{ display: "flex", gap: 2 }}>
-                    <TextField
-                      variant="standard"
+                    <CustomTextField
                       label="Account Holder's Name"
                       name="accountHolderName"
                       value={details.accountHolderName}
                       onChange={handleChange}
-                      margin="normal"
-                      fullWidth
                     />
-
-                    <TextField
-                      variant="standard"
-                      label=" Effective Date:"
-                      type="date"
-                      name="effectiveDate"
-                      value={details.effectiveDate}
-                      onChange={handleChange}
-                      margin="normal"
-                      InputLabelProps={{ shrink: true }}
-                    />
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "10px",
+                        mt: 2,
+                      }}
+                    >
+                      <Typography
+                        variant="body1"
+                        sx={{
+                          fontWeight: 500,
+                          color: "rgba(0, 0, 0, 0.8)",
+                          fontSize: "14px",
+                          display: "inline-block",
+                        }}
+                      >
+                        Effective Date:
+                      </Typography>
+                      <TextField
+                        variant="standard"
+                        type="date"
+                        name="effectiveDate"
+                        value={details.effectiveDate}
+                        onChange={handleChange}
+                        margin="normal"
+                        InputProps={{
+                          style: {
+                            fontWeight: 500,
+                            color: "#333",
+                            fontSize: "16px",
+                          },
+                        }}
+                        sx={{
+                          display: "inline-block",
+                        }}
+                      />
+                    </Box>
                   </Box>
                   <Button
                     variant="contained"
@@ -152,47 +282,39 @@ const BankAccount = () => {
                     Find My Branch
                   </Button>
                   <Box display="flex" mt={2} gap={2}>
-                    <TextField
-                      variant="standard"
+                    <CustomTextField
                       label="Bank Name"
                       name="bankName"
                       value={details.bankName}
                       onChange={handleChange}
-                      fullWidth
                     />
-                    <TextField
-                      variant="standard"
+
+                    <CustomTextField
                       label="City"
                       name="city"
                       value={details.city}
                       onChange={handleChange}
-                      fullWidth
                     />
-                    <TextField
-                      variant="standard"
+                    <CustomTextField
                       label="Branch Name"
                       name="branchName"
                       value={details.branchName}
                       onChange={handleChange}
-                      fullWidth
                     />
                   </Box>
                   <Box display="flex" gap={2} mt={2}>
-                    <TextField
-                      variant="standard"
+                    <CustomTextField
                       label="IFSC Code"
                       name="ifscCode"
                       value={details.ifscCode}
                       onChange={handleChange}
-                      fullWidth
+                      sx={{ width: "50px" }}
                     />
-                    <TextField
-                      variant="standard"
+                    <CustomTextField
                       label="Account Number"
                       name="accountNumber"
                       value={details.accountNumber}
                       onChange={handleChange}
-                      fullWidth
                     />
                   </Box>
                   <Box mt={2} display="flex" justifyContent="flex-end" gap={2}>
@@ -426,7 +548,7 @@ const BankAccount = () => {
             }}
           >
             <CloseIcon />
-          </IconButton>{" "}
+          </IconButton>
         </DialogTitle>
         <DialogContent>
           <Box display="flex" alignItems="center" mt={2} mb={2}>
@@ -434,6 +556,8 @@ const BankAccount = () => {
               fullWidth
               placeholder="Entry IFSC Code"
               variant="outlined"
+              value={ifscCode}
+              onChange={(e) => setIfscecode(e.target.value)}
               sx={{
                 flex: 1,
                 "&:hover": {
@@ -444,6 +568,11 @@ const BankAccount = () => {
             <Button
               variant="contained"
               color="primary"
+              onClick={() => {
+                handleDialogOpen2();
+                handleSearch();
+                handleDialogClose();
+              }}
               sx={{
                 ml: 0,
                 height: "55px",
@@ -457,6 +586,13 @@ const BankAccount = () => {
               Submit
             </Button>
           </Box>
+
+          {error && (
+            <Typography color="error" variant="body1" gutterBottom>
+              {error}
+            </Typography>
+          )}
+
           <Box display="flex" alignItems="center">
             <Divider
               sx={{
@@ -473,66 +609,92 @@ const BankAccount = () => {
             />
           </Box>
           <Box display="flex" gap={2} mb={2}>
-            <FormControl fullWidth>
-              <InputLabel>Select Bank</InputLabel>
+            {/* Bank Dropdown */}
+            <FormControl fullWidth sx={{ mb: 2 }}>
+              <InputLabel id="bank-label">Bank</InputLabel>
               <Select
-                sx={{
-                  ".MuiOutlinedInput-notchedOutline": { display: "none" },
-                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                    display: "none",
-                  },
-                  borderBottom: 1,
+                labelId="bank-label"
+                value={selectedBank}
+                onChange={(e) => {
+                  setSelectedBank(e.target.value);
+                  setSelectedState("");
+                  setSelectedCity("");
+                  setSelectedBranch("");
                 }}
               >
-                <MenuItem value="bank1">Bank 1</MenuItem>
-                <MenuItem value="bank2">Bank 2</MenuItem>
+                <MenuItem value="">
+                  <em>Select Bank</em>
+                </MenuItem>
+                {banks.map((bank) => (
+                  <MenuItem key={bank} value={bank}>
+                    {bank}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
-            <FormControl fullWidth>
-              <InputLabel>Select State</InputLabel>
+
+            {/* State Dropdown */}
+            <FormControl fullWidth sx={{ mb: 2 }} disabled={!selectedBank}>
+              <InputLabel id="state-label">State</InputLabel>
               <Select
-                sx={{
-                  ".MuiOutlinedInput-notchedOutline": { display: "none" },
-                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                    display: "none",
-                  },
-                  borderBottom: 1,
+                labelId="state-label"
+                value={selectedState}
+                onChange={(e) => {
+                  setSelectedState(e.target.value);
+                  setSelectedCity("");
+                  setSelectedBranch("");
                 }}
               >
-                <MenuItem value="state1">State 1</MenuItem>
-                <MenuItem value="state2">State 2</MenuItem>
+                <MenuItem value="">
+                  <em>Select State</em>
+                </MenuItem>
+                {states.map((state) => (
+                  <MenuItem key={state} value={state}>
+                    {state}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
           </Box>
           <Box display="flex" gap={2} mb={2}>
-            <FormControl fullWidth>
-              <InputLabel>Select City</InputLabel>
+            {/* City Dropdown */}
+            <FormControl fullWidth sx={{ mb: 2 }} disabled={!selectedState}>
+              <InputLabel id="city-label">City</InputLabel>
               <Select
-                sx={{
-                  ".MuiOutlinedInput-notchedOutline": { display: "none" },
-                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                    display: "none",
-                  },
-                  borderBottom: 1,
+                labelId="city-label"
+                value={selectedCity}
+                onChange={(e) => {
+                  setSelectedCity(e.target.value);
+                  setSelectedBranch("");
                 }}
               >
-                <MenuItem value="city1">City 1</MenuItem>
-                <MenuItem value="city2">City 2</MenuItem>
+                <MenuItem value="">
+                  <em>Select City</em>
+                </MenuItem>
+                {cities.map((city) => (
+                  <MenuItem key={city} value={city}>
+                    {city}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
-            <FormControl fullWidth>
-              <InputLabel>Select Branch</InputLabel>
+
+            {/* Branch Dropdown */}
+            <FormControl fullWidth sx={{ mb: 2 }} disabled={!selectedCity}>
+              <InputLabel id="branch-label">Branch</InputLabel>
               <Select
-                sx={{
-                  ".MuiOutlinedInput-notchedOutline": { display: "none" },
-                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                    display: "none",
-                  },
-                  borderBottom: 1,
-                }}
+                labelId="branch-label"
+                value={selectedBranch}
+                onChange={(e) => setSelectedBranch(e.target.value)}
               >
-                <MenuItem value="branch1">Branch 1</MenuItem>
-                <MenuItem value="branch2">Branch 2</MenuItem>
+                <MenuItem value="">
+                  <em>Select Branch</em>
+                </MenuItem>
+                {branches.map((branch) => (
+                  <MenuItem key={branch} value={branch}>
+                    {branch}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
           </Box>
@@ -552,6 +714,96 @@ const BankAccount = () => {
             Submit
           </Button>
         </DialogActions>
+      </Dialog>
+
+      {/* for Finding Bank by IFSC code Show */}
+
+      <Dialog open={openDialog2} onClose={handleDialogClose2} fullWidth>
+        <DialogTitle
+          sx={{
+            fontWeight: "500",
+            borderBottom: "1px solid #D5E3F3",
+            marginBottom: "2",
+            color: "#121111",
+            fontSize: "18px",
+            padding: "15px 20px 5px",
+          }}
+        >
+          Find Branch
+          <IconButton
+            aria-label="close"
+            onClick={handleDialogClose2}
+            sx={{
+              position: "absolute",
+              right: 8,
+              top: 8,
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent>
+          <Box display="flex" alignItems="center">
+            {bankDetails && (
+              <Box>
+                {fieldsToDisplay.map(({ key, label }) => (
+                  <Box
+                    key={key}
+                    sx={{
+                      padding: "15px 20px",
+                      borderBottom: "1px solid rgba(199, 215, 230, 0.38) ",
+                      display: "flex",
+                      alignItems: "center",
+                      // gap: "5px",
+                    }}
+                  >
+                    <Typography
+                      variant="body1"
+                      sx={{
+                        fontWeight: "600",
+                        float: "right",
+                        color: "#000000",
+                        fontSize: "13px",
+                        lineHeight: "18px",
+                        width: "40%",
+                      }}
+                    >
+                      <strong>{label}</strong>
+                    </Typography>
+                    <Typography
+                      variant="body1"
+                      sx={{
+                        color: "#696767",
+                        fontSize: "13px",
+                        float: "left",
+                        // width: "60%",
+                        flex: 1,
+                      }}
+                    >
+                      {bankDetails[key]}
+                    </Typography>
+                  </Box>
+                ))}
+              </Box>
+            )}
+          </Box>
+
+          <Box display="flex" justifyContent="flex-end">
+            <Button
+              variant="contained"
+              color="primary"
+              sx={{
+                backgroundColor: "#1976d2",
+                "&:hover": {
+                  backgroundColor: "#1565c0",
+                },
+                mt: 2,
+              }}
+            >
+              Select Bank
+            </Button>
+          </Box>
+        </DialogContent>
       </Dialog>
     </>
   );
