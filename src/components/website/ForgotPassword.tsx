@@ -9,9 +9,6 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import { postRequest } from "../../api/Api"; // Ensure this function is implemented
-import { SETPASSWORD } from "../../api/Server"; // Define your forgot password endpoint
 import { Formik, Form, Field, FormikHelpers, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
@@ -23,43 +20,30 @@ interface ForgotPasswordValues {
 const validationSchema = Yup.object({
   email: Yup.string()
     .email("Invalid email address")
-    .required("This feild is reuired"),
+    .required("This field is required"),
   otp: Yup.string()
     .matches(/^\d{6}$/, "Invalid OTP")
-    .required("This feild is reuired"),
+    .required("This field is required"),
 });
 
 export default function ForgotPassword() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = async (
+  const handleSubmit = (
     values: ForgotPasswordValues,
     { setSubmitting }: FormikHelpers<ForgotPasswordValues>
   ) => {
-    setLoading(true); // Set loading state
+    setLoading(true);
 
-    try {
-      const response = await postRequest(SETPASSWORD, "", values);
-
-      if (response.status === 200) {
-        toast.success(
-          response.data.message || "Password reset link sent to your email!"
-        );
-        setSubmitting(false); // Formik will reset the form
-        navigate("/login"); // Redirect back to login after submission
-      } else {
-        throw new Error(response.data.message || "Unexpected error occurred.");
-      }
-    } catch (error: any) {
-      toast.error(
-        error.response?.data?.message ||
-          "Failed to send reset link. Please try again."
-      );
-      setSubmitting(false);
-    } finally {
-      setLoading(false); // Reset loading state
-    }
+    //     // Simulate a delay to represent an API call
+    //     setTimeout(() => {
+    //       setLoading(false);
+    //       setSubmitting(false);
+    //       // Show success toast and redirect to login
+    //       toast.success("Password reset link sent to your email!");
+    //       navigate("/login");
+    //     }, 2000); // Simulate 2 seconds delay for form submission
   };
 
   return (
@@ -88,7 +72,7 @@ export default function ForgotPassword() {
             gutterBottom
             sx={{ mb: 3 }}
           >
-            Email Address/ Moblie Number
+            Email Address / Mobile Number
           </Typography>
         </Box>
 
