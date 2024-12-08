@@ -24,6 +24,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import ProfilePhotoUpload from "../my_profile/ProfilePhotoUpload";
 import axios from "axios";
 import CustomTextField from "../common/CustomTextField";
+import { getRequest } from "../../../api/Api";
+import { ACCOUNTDETAILS } from "../../../api/Server";
 
 interface BankDetails {
   IFSC: string;
@@ -177,6 +179,10 @@ const BankAccount = () => {
 
     fetchData();
   }, [selectedBank, selectedState, selectedCity]);
+
+
+  
+
 
   return (
     <>

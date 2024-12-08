@@ -31,6 +31,8 @@ import Recruitment from "../components/website/Recruitment";
 import TimeAttendance from "../components/website/TimeAttendance";
 import Logs from "./../components/app/Admin/attendance/Logs";
 import Settings from "../components/app/Admin/attendance/Settings";
+import ForgotPassword from "../components/website/ForgotPassword";
+import { Component } from "react";
 
 // website routes
 export const websiteRoutes: RouteComponent[] = [
@@ -42,6 +44,8 @@ export const websiteRoutes: RouteComponent[] = [
   { path: "/time-attendance", component: <TimeAttendance /> },
   { path: "/contact-us", component: <Contact /> },
   { path: "/login", component: <Login /> },
+  { path: "/forgot-password", component: <ForgotPassword /> },
+
   // { path: "/set-password", component: <SetPassword /> },
 ];
 
@@ -60,7 +64,7 @@ export const appRoutes: RouteComponent[] = [
   { path: "/dashboard/declaration", component: <Declaration /> },
   { path: "/dashboard/salary-structure", component: <SalaryStructure /> },
   { path: "/dashboard/pay-slip", component: <PaySlip /> },
-  
+
   { path: "/dashboard/setup", component: <SetupPayroll /> },
   { path: "/dashboard/document", component: <DocumentProfile /> },
   { path: "/dashboard/admin", component: <Admin /> },

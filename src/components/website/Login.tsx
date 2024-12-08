@@ -1,5 +1,12 @@
 import VpnKeyIcon from "@mui/icons-material/VpnKey";
-import { Button, Container, Grid, TextField, Typography } from "@mui/material";
+import {
+  Button,
+  Container,
+  Grid,
+  Paper,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { AxiosError, AxiosResponse } from "axios";
 import { FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
@@ -9,6 +16,8 @@ import images from "../../images/images.json"; // Ensure images are correctly im
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../redux/slices/userSlice"; // Action to set user in Redux store
+import { PeopleRounded } from "@mui/icons-material";
+import { border, Box } from "@mui/system";
 
 export default function Login() {
   const dispatch = useDispatch();
@@ -28,7 +37,7 @@ export default function Login() {
         const { userId, token, role, message, user } = response.data;
 
         // Extract user information from the user object
-        const { firstName, lastName, email,avatar } = user;
+        const { firstName, lastName, email, avatar } = user;
 
         // Store data in local storage for session management
         localStorage.setItem("token", token);
@@ -42,7 +51,7 @@ export default function Login() {
             lastName,
             email: email,
             role,
-            avatar
+            avatar,
           })
         );
 
@@ -64,76 +73,103 @@ export default function Login() {
 
   return (
     <Container sx={{ mt: 10, mb: 5 }}>
-      <Grid container>
-        <Grid
-          item
-          xs={12}
-          md={7}
-          component="img"
-          borderRadius={3}
-          src={`${images.logingInImage.src}`}
-          alt={`${images.logingInImage.alt}`}
-        />
-        <Grid item xs={12} md={5}>
+      <Paper>
+        <Grid container>
           <Grid
-            container
-            spacing={4}
-            padding={4}
-            component="form"
-            onSubmit={handleSubmit}
-          >
-            <Grid item xs={12}>
-              <Typography
-                variant="h5"
-                color="#191970"
-                fontWeight="600"
-                textTransform="uppercase"
-                gutterBottom
+            item
+            xs={12}
+            md={5}
+            component="img"
+            mt={0}
+            borderRadius={3}
+            src={`${images.logingInImage.src}`}
+            alt={`${images.logingInImage.alt}`}
+          />
+          <Grid item xs={12} md={5}>
+            <Box
+              sx={{
+                width: 500,
+                height: 200,
+                boxShadow: 4, // Predefined shadow level
+                backgroundColor: "white",
+                padding: 2,
+                borderRadius: 2, // Optional rounded corners
+              }}
+            >
+              <Grid
+                container
+                spacing={4}
+                padding={4}
+                component="form"
+                onSubmit={handleSubmit}
               >
-                Login
-              </Typography>
-              <Typography color="#9e9e9e" textTransform="capitalize">
-                Welcome to SAWA HRIS
-              </Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                autoFocus
-                fullWidth
-                id="email"
-                size="medium"
-                name="email"
-                label="Email"
-                type="email"
-                autoComplete="username"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                id="password"
-                size="medium"
-                name="password"
-                label="Password"
-                type="password"
-                autoComplete="current-password"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Button
-                variant="contained"
-                type="submit"
-                size="medium"
-                startIcon={<VpnKeyIcon />}
-              >
-                Login
-              </Button>
-            </Grid>
+                <Grid item xs={12}>
+                  <Typography
+                    variant="h5"
+                    color="#191970"
+                    fontWeight="600"
+                    textTransform="uppercase"
+                    gutterBottom
+                  >
+                    Login
+                  </Typography>
+                  <Typography color="#9e9e9e" textTransform="capitalize">
+                    Welcome to SAWA HRIS
+                  </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    variant="standard"
+                    required
+                    autoFocus
+                    fullWidth
+                    id="email"
+                    size="medium"
+                    name="email"
+                    label="Email"
+                    type="email"
+                    autoComplete="username"
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    variant="standard"
+                    required
+                    fullWidth
+                    id="password"
+                    size="medium"
+                    name="password"
+                    label="Password"
+                    type="password"
+                    autoComplete="current-password"
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography
+                    variant="body2"
+                    color="primary"
+                    onClick={() => navigate("/forgot-password")}
+                    sx={{ cursor: "pointer", textDecoration: "underline" }}
+                  >
+                    Forgot Password?
+                  </Typography>
+                </Grid>
+
+                <Grid item xs={12}>
+                  <Button
+                    variant="contained"
+                    type="submit"
+                    size="medium"
+                    startIcon={<VpnKeyIcon />}
+                  >
+                    Login
+                  </Button>
+                </Grid>
+              </Grid>
+            </Box>
           </Grid>
         </Grid>
-      </Grid>
+      </Paper>
     </Container>
   );
 }
