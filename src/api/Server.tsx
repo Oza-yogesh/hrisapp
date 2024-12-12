@@ -8,6 +8,8 @@ export const SIGNUP: string = "/api/public/user/signup";
 export const ONBOARD: string = "/api/private/employee/createEmployee";
 export const SETPASSWORD: string = "/api/private/employee/setpassword";
 
+export const ACCOUNTDETAILS: string = "/api/private/accountdetails";
+
 // company api
 export const GET_COMPANY_DATA: string = "/api/private/company";
 export const ONBOARD_EMPLOYEE: string = "/api/private/employee/createEmployee";
