@@ -17,7 +17,7 @@ interface BoxColumnState {
   Department?: boolean;
   Designation?: boolean;
   Grade?: boolean;
-  EmployeeManager?: boolean;
+  EmployeeManager?: boolean; 
 }
 
 function Directory() {

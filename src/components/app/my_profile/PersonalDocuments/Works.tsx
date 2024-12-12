@@ -1,5 +1,4 @@
 import {
-  Paper,
   TableCell,
   TableHead,
   TableRow,
@@ -7,7 +6,6 @@ import {
   Box,
   Button,
   TextField,
-  Icon,
   Divider,
   IconButton
 } from "@mui/material";
@@ -50,51 +48,29 @@ function Works() {
 
   return (
     <>
-      <Grid
-        container
-        spacing={2}
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          marginTop: "20px",
-        }}
-      >
         <Grid item xs={10}>
-          <Paper elevation={3} sx={{ padding: "20px", textAlign: "initial" }}>
+          
             <Grid
               container
-              spacing={2}
+              spacing={1}
               display="flex"
               justifyContent="space-evenly"
+              marginTop={"5px"}
             >
-              <Grid item xs={12}>
-                <Typography
-                  variant="body1"
-                  textTransform="uppercase"
-                  color="#936c6c"
-                  fontWeight="bold"
-                >
-                  WORK
-                </Typography>
-                <Divider
-                  variant="fullWidth"
-                  sx={{ backgroundColor: "#424242" }}
-                />
               </Grid>
               <Table aria-label="simple table">
                 <TableHead>
                   <TableRow>
-                    <TableCell sx={{ color: "#686C61", fontWeight: "bold" }}>
+                    <TableCell sx={{ color: "#6e8498", fontWeight: "bold" }}>
                       NAME
                     </TableCell>
-                    <TableCell sx={{ color: "#686C61", fontWeight: "bold" }}>
+                    <TableCell sx={{ color: "#6e8498", fontWeight: "bold" }}>
                       UPLOADED BY
                     </TableCell>
-                    <TableCell sx={{ color: "#686C61", fontWeight: "bold" }}>
+                    <TableCell sx={{ color: "#6e8498", fontWeight: "bold" }}>
                       UPLOADED ON
                     </TableCell>
-                    <TableCell sx={{ color: "#686C61", fontWeight: "bold" }}>
+                    <TableCell sx={{ color: "#6e8498", fontWeight: "bold" }}>
                       ACTIONS
                     </TableCell>
                   </TableRow>
@@ -102,7 +78,7 @@ function Works() {
               </Table>
               <Box>
                 <React.Fragment>
-                  <Button
+                  {/* <Button
                     onClick={handleClickOpen}
                     sx={{
                       marginRight: "155vh",
@@ -111,7 +87,20 @@ function Works() {
                     }}
                   >
                     <AddCircleOutlineIcon fontSize="large" /> Add
-                  </Button>
+                  </Button> */}
+                  <Button
+                startIcon={<AddCircleOutlineIcon />}
+                sx={{
+                  color: "#2094FF",
+                  textTransform: "capitalize",
+                  fontWeight: "bold",
+                  fontSize: "16px",
+                  marginRight:"20px"
+                }}
+                onClick={handleClickOpen}
+              >
+              Add
+              </Button>
                   <BootstrapDialog
                     onClose={handleClose}
                     aria-labelledby="customized-dialog-title"
@@ -179,7 +168,7 @@ function Works() {
                       </Box>
                       <Divider
                         variant="fullWidth"
-                        sx={{ backgroundColor: "#424242", margin: "10px" }}
+                        sx={{ backgroundColor: "#c7d7e6", margin: "10px", fontWeight:"bold" }}
                       />
                       <Box
                         margin={2}
@@ -204,9 +193,6 @@ function Works() {
                 </React.Fragment>
               </Box>
             </Grid>
-          </Paper>
-        </Grid>
-      </Grid>
     </>
   );
 }

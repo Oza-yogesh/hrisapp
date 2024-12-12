@@ -17,4 +17,7 @@ export const GET_EMPLOYEE_DETAILS_BY_ID: string ="/api/private/employee/getEmplo
 export const GET_ALL_EMPLOYEE_DETAILS: string ="/api/private/employee/getEmployeeDetails";
 
 export const UPLOAD_PHOTO: string = "/api/private/employee/upload-profile";
-export const GET_PHOTO: string = "/api/private/employee/profile-photo";
+export const GET_PHOTO: string = "/api/private/employee/profile-photo"; 
+
+
+

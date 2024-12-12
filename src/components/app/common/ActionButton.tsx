@@ -5,7 +5,7 @@ import React from "react";
 
 interface ActionButtonsProps {
   onCancel: () => void;
-  onSave: () => void;
+  onSave?: () => void;
   showButtons: boolean;
 }
 
@@ -25,19 +25,20 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
         gap: "10px",
       }}
     >
-      <Button startIcon={<ClearIcon />} onClick={onCancel}>
+      <Button  startIcon={<ClearIcon />} onClick={onCancel}>
         Cancel
       </Button>
       <Button
+        type="submit"
         variant="contained"
         startIcon={<CheckIcon />}
         onClick={onSave}
-        sx={{
+        sx={{ 
           backgroundColor: "#1976d2",
           "&:hover": {
             backgroundColor: "#1565c0",
           },
-        }}
+        }} 
       >
         Save
       </Button>

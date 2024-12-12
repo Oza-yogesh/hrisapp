@@ -2,45 +2,37 @@ import React, { useState } from "react";
 import {
   Box,
   Button,
-  Divider,
+  Modal,
   Grid,
-  Icon,
-  Paper,
   TableCell,
   TableHead,
   TableRow,
-  Typography,
   TextField,
-  FormControl,
-  NativeSelect,
-  IconButton
+  Typography,
 } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { Table } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import { styled } from "@mui/material/styles";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
-const BootstrapDialog = styled(Dialog)(({ theme }) => ({
-    "& .MuiDialogContent-root": {
-      padding: theme.spacing(2),
-    },
-    "& .MuiDialogActions-root": {
-      padding: theme.spacing(1),
-    },
-  }));
+interface FormValues {
+  courceType: string;
+  certificationTitle: string;
+  file: File | null;
+}
 
 function Certifications() {
+  const documents = [
+    {}
+  ]
   const [showBox, setShowBox] = useState<any>(false);
-  const [open, setOpen]=useState(false)
+  const [open, setOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [uploadedDocuments, setUploadedDocuments] = useState(documents);
 
   const handleToggle = () => {
     setShowBox(!showBox);
-   
-  }
+  };
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -48,192 +40,227 @@ function Certifications() {
     setOpen(false);
   };
 
-  const handleFileChange = (event: any) => {
-    const file = event.target.files ? event.target.files[0] : null;
-    setSelectedFile(file);
-  };
+  const validationSchema = Yup.object({
+    courceType:Yup.string().required("Cource Type is required"),
+    certificationTitle: Yup.string().required("Certification title is required"),
+    file: Yup.mixed().required("File is required").test("is-file", "Invalid file", (value)=>value instanceof File),
+  })
+  const formik = useFormik({
+    initialValues:{
+      courceType: "",
+      certificationTitle: "",
+      file:null,
+    },
 
+    validationSchema: {validationSchema},
+    
+    onSubmit:(values: FormValues)=>{
+      if (values.file && values.file instanceof File) {
+        const newDocument = {
+          courceType: values.courceType,
+          certificationTitle: values.certificationTitle,
+          uploadedBy: "User Name",
+          verification: "Pending",
+          url: URL.createObjectURL(values.file),
+        };
+
+        setUploadedDocuments((prev) => [...prev, newDocument]);
+        formik.resetForm();
+        handleClose();
+      } else {
+        console.error("Invalid file selected");
+      }
+    }
+  })
 
   return (
     <>
-      <Grid
-        container
-        spacing={2}
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          marginTop: "20px",
-        }}
-      >
-        
-        <Grid item xs={10}>
-          <Paper elevation={3} sx={{ padding: "20px", textAlign: "initial",  }}>
-            <Grid
-              container
-              spacing={2}
-              display="flex"
-              justifyContent="space-evenly"
-            >
-              <Grid item xs={12}>
-                <Typography
-                  variant="body1"
-                  textTransform="uppercase"
-                  color="#936c6c"
-                  fontWeight="bold"
+      <Grid item xs={10}>
+        <Grid
+          container
+          spacing={2}
+          display="flex"
+          marginLeft={"0px"}
+          marginTop={"5px"}
+        >
+          <Table aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell sx={{ color: "#6e8498", fontWeight: "bold" }}>
+                  COURSE TITLE
+                </TableCell>
+                <TableCell sx={{ color: "#6e8498", fontWeight: "bold" }}>
+                  UPLOADED BY
+                </TableCell>
+                <TableCell sx={{ color: "#6e8498", fontWeight: "bold" }}>
+                  TYPE
+                </TableCell>
+                <TableCell sx={{ color: "#6e8498", fontWeight: "bold" }}>
+                  VERIFICATION
+                </TableCell>
+                <TableCell sx={{ color: "#6e8498", fontWeight: "bold" }}>
+                  ACTIONS
+                </TableCell>
+              </TableRow>
+            </TableHead>
+          </Table>
+          <Box>
+            <React.Fragment>
+              <Button
+                startIcon={<AddCircleOutlineIcon />}
+                sx={{
+                  color: "#2094FF",
+                  textTransform: "capitalize",
+                  fontWeight: "bold",
+                  fontSize: "16px",
+                  marginRight:"20px"
+                }}
+                onClick={handleClickOpen}
+              >
+              Add
+              </Button>
+              {/* <BootstrapDialog
+                onClose={handleClose}
+                aria-labelledby="customized-dialog-title"
+                open={open}
+              >
+                <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
+                  Add Certificate
+                </DialogTitle>
+                <IconButton
+                  aria-label="close"
+                  onClick={handleClose}
+                  sx={{
+                    position: "absolute",
+                    right: 8,
+                    top: 8,
+                    color: (theme) => theme.palette.grey[500],
+                  }}
                 >
-                  CERTIFICATIONS
-                </Typography>
-                <Divider
-                  variant="fullWidth"
-                  sx={{ backgroundColor: "#424242" }}
-                />
-              </Grid>
-              <Table aria-label="simple table">
-                <TableHead>
-                  <TableRow>
-                    <TableCell sx={{ color: "#686C61", fontWeight: "bold" }}>
-                      COURSE TITLE
-                    </TableCell>
-                    <TableCell sx={{ color: "#686C61", fontWeight: "bold" }}>
-                      UPLOADED BY
-                    </TableCell>
-                    <TableCell sx={{ color: "#686C61", fontWeight: "bold" }}>
-                      TYPE
-                    </TableCell>
-                    <TableCell sx={{ color: "#686C61", fontWeight: "bold" }}>
-                      VERIFICATION
-                    </TableCell>
-                    <TableCell sx={{ color: "#686C61", fontWeight: "bold" }}>
-                      ACTIONS
-                    </TableCell>
-                  </TableRow>
-                </TableHead>
-              </Table>
-              <Box>
-                <React.Fragment>
-                  <Button
-                    onClick={handleClickOpen}
-                    sx={{
-                      marginRight: "155vh",
-                      marginTop: "10px",
-                      color: "blue",
-                    }}
+                  <CloseIcon />
+                </IconButton>
+                <DialogContent dividers>
+                  <Typography
+                    fontSize={14}
+                    color="gray"
+                    textAlign="left"
+                    marginTop={2}
                   >
-                    <AddCircleOutlineIcon fontSize="large" /> Add
-                  </Button>
-              <BootstrapDialog
-                    onClose={handleClose}
-                    aria-labelledby="customized-dialog-title"
-                    open={open}
+                    Select Course Type
+                  </Typography>
+                  <Box>
+                    <FormControl fullWidth>
+                      <NativeSelect
+                        inputProps={{
+                          name: "ID Type",
+                          id: "uncontrolled-native",
+                        }}
+                      >
+                        <option>{}</option>
+                        <option>Graduation</option>
+                        <option>Post Graduation</option>
+                        <option>Doctorate</option>
+                        <option>Diploma</option>
+                        <option>Pre University</option>
+                        <option>Certification</option>
+                        <option>Other</option>
+                      </NativeSelect>
+                    </FormControl>
+                  </Box>
+                  <TextField
+                    sx={{ width: "100%", marginTop: "25px" }}
+                    id="standard-multiline-static"
+                    rows={1}
+                    placeholder="Enter Certification Title"
+                    variant="standard"
+                  />
+                  <Box margin={3} marginLeft={-1}>
+                    <input
+                      accept="image/*"
+                      style={{ display: "none" }}
+                      id="raised-button-file"
+                      type="file"
+                      onChange={handleFileChange}
+                    />
+                    <label htmlFor="contained-button-file">
+                      <Button variant="contained" component="span">
+                        Select File
+                      </Button>
+                    </label>
+                    {selectedFile && (
+                      <label>
+                        <Typography variant="body1">
+                          Selected File: {selectedFile.name}
+                        </Typography>
+                        <Typography variant="body1">
+                          Selected Size: {selectedFile.size}
+                        </Typography>
+                      </label>
+                    )}
+                  </Box>
+                  <Divider
+                    variant="fullWidth"
+                    sx={{ backgroundColor: "#424242", margin: "10px" }}
+                  />
+                  <Box
+                    margin={2}
+                    sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}
+                    marginLeft={15}
                   >
-                    <DialogTitle
-                      sx={{ m: 0, p: 2 }}
-                      id="customized-dialog-title"
-                    >
-                      Add Certificate
-                    </DialogTitle>
-                    <IconButton
-                      aria-label="close"
-                      onClick={handleClose}
+                    <Button onClick={handleClose} startIcon={<CloseIcon />}>
+                      Cancel
+                    </Button>
+                    <Button
                       sx={{
-                        position: "absolute",
-                        right: 8,
-                        top: 8,
-                        color: (theme) => theme.palette.grey[500],
+                        bgcolor: "blue",
+                        color: "white",
+                        width: "80px",
                       }}
                     >
-                      <CloseIcon />
-                    </IconButton>
-                    <DialogContent dividers>
-                    <Typography
-                      fontSize={14}
-                      color="gray"
-                      textAlign="left"
-                      marginTop={2}
-                    >
-                      Select Course Type
-                    </Typography>
-                    <Box>
-                      <FormControl fullWidth>
-                        <NativeSelect
-                          inputProps={{
-                            name: "ID Type",
-                            id: "uncontrolled-native",
-                          }}
-                        >
-                          <option>{}</option>
-                          <option>Graduation</option>
-                          <option>Post Graduation</option>
-                          <option>Doctorate</option>
-                          <option>Diploma</option>
-                          <option>Pre University</option>
-                          <option>Certification</option>
-                          <option>Other</option>
-                        </NativeSelect>
-                      </FormControl>
-                    </Box>
-                    <TextField
-                      sx={{ width: "100%", marginTop: "25px" }}
-                      id="standard-multiline-static"
-                      rows={1}
-                      placeholder="Enter Certification Title"
-                      variant="standard"
-                    />
-                    <Box margin={3} marginLeft={-1}>
-                      <input
-                        accept="image/*"
-                        style={{ display: "none" }}
-                        id="raised-button-file"
-                        type="file"
-                        onChange={handleFileChange}
-                      />
-                     <label htmlFor="contained-button-file">
-                          <Button variant="contained" component="span">
-                            Select File
-                          </Button>
-                        </label>
-                        {selectedFile && (
-                          <label>
-                          <Typography variant="body1">
-                            Selected File: {selectedFile.name}
-                          </Typography>
-                          <Typography variant="body1">
-                            Selected Size: {selectedFile.size}
-                          </Typography>
-                        </label>
+                      Save
+                    </Button>
+                  </Box>
+                </DialogContent>
+              </BootstrapDialog> */}
+              <Modal open={open} onClose={handleClose}>
+                <Box
+                  sx={{
+                    position: "absolute",
+                    top:"50%",
+                    left:"50%",
+                    transform:"translate(-50%, -50%)",
+                    width:400,
+                    bgcolor:"Background.paper",
+                    boxShadow:24,
+                    p:4,
+                    borderRadius:2,
+                  }}
+                >
+                  <Typography 
+                    variant="h6"
+                    sx={{fontSize:"16px", fontWeight:"bold", marginBottom:2}}
+                  >
+                    Add Document
+                  </Typography>
 
-                        )}
-                      </Box>
-                      <Divider
-                        variant="fullWidth"
-                        sx={{ backgroundColor: "#424242", margin: "10px" }}
-                      />
-                      <Box
-                        margin={2}
-                        sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}
-                        marginLeft={15}
+                  <form>
+                    <TextField
+                      select
+                      label="Select ID Type"
                       >
-                        <Button onClick={handleClose} startIcon={<CloseIcon />}>
-                          Close
-                        </Button>
-                        <Button
-                          sx={{
-                            bgcolor: "blue",
-                            color: "white",
-                            width: "80px",
-                          }}
-                        >
-                          Save
-                        </Button>
-                      </Box>
-                    </DialogContent>
-                  </BootstrapDialog>
-                </React.Fragment>
-                    </Box>
-            </Grid>
-          </Paper>
-          </Grid>
+                      Select Cource Type
+                    </TextField>
+                    <TextField>
+                      Enter Certifications Title
+                    </TextField>
+                    
+                  </form>
+                </Box>
+              </Modal>
+
+            </React.Fragment>
+          </Box>
+        </Grid>
       </Grid>
     </>
   );

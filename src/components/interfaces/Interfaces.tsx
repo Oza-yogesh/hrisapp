@@ -87,6 +87,7 @@ export interface EmployeeDetails {
     ifscCode: string;
     accountNumber: string;
   };
+  
   addresses: {
     currentAddress: string;
     permanentAddress: string;
@@ -112,4 +113,17 @@ export interface EmployeeDetails {
 export interface RouteComponent {
   path: string;
   component: JSX.Element;
+}
+
+export interface IEducationDetails{
+  
+  _id:string;
+  qualificationType: string;
+  courseName:  string;
+  courseType:  string;
+  stream:  string;
+  courseStartDate:string;
+  courseEndDate: string;
+  collegeName: string;
+  universityName:  string;
 }
