@@ -13,6 +13,8 @@ interface CustomTextFieldProps {
   inputProps?: object;
   sx?: SxProps<Theme>;
   InputLabelProps?: object;
+  error?: boolean; // Add error property
+  helperText?: React.ReactNode; // Add helperText property
 }
 
 const CustomTextField: React.FC<CustomTextFieldProps> = ({
@@ -25,6 +27,8 @@ const CustomTextField: React.FC<CustomTextFieldProps> = ({
   width = "60vh",
   inputProps = {},
   InputLabelProps = {},
+  error = false, // Default value for error
+  helperText = "", // Default value for helperText
 }) => {
   return (
     <TextField
@@ -34,20 +38,13 @@ const CustomTextField: React.FC<CustomTextFieldProps> = ({
       value={value}
       onChange={onChange}
       margin={margin}
+      error={error} // Pass error to TextField
+      helperText={helperText} // Pass helperText to TextField
       sx={{
         width, // Use customizable width from props
-        "& .MuiInputLabel-root": {
-          fontWeight: 600,
-          color: "rgba(0, 0, 0, 0.8)", // Default label color
-          fontSize: "18px",
+        "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
+          borderColor: "#1976d2", // Border color for outlined variant when focused
         },
-        "& .MuiInputLabel-root.Mui-focused": {
-          color: "#1976d2", // Label color when focused
-        },
-        "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
-          {
-            borderColor: "#1976d2", // Border color for outlined variant when focused
-          },
         "& .MuiInputBase-root": {
           color: "#464a4c", // Input text color
           fontSize: "1rem",

@@ -181,8 +181,6 @@ const BankAccount = () => {
   }, [selectedBank, selectedState, selectedCity]);
 
 
-  
-
 
   return (
     <>

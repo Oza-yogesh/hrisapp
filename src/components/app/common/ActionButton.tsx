@@ -29,6 +29,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
         Cancel
       </Button>
       <Button
+        type="submit"
         variant="contained"
         startIcon={<CheckIcon />}
         onClick={onSave}
